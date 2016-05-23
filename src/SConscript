@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright © 2016 Daniel Gutson, Aurelio Remonda, Leonardo Boquillón,
+#                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
+#                  Taller Technologies.
+#
+# @file        Sconscript
+# @author      Emanuel Bringas
+# @author      Francisco Herrero
+# @date        2016-05-06
+# @brief       Main SConscript for agdb
+#
+# This file is part of agdb
+#
+# agdb is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# agdb is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with agdb.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+Import('env')
+
+# env['CC'] = "clang-3.7"
+# env['CXX'] = "clang++-3.7"
+env.Append(CXXFLAGS=['-std=c++11'])
+
+# env.Append(CXXFLAGS=['-stdlib=libstdc++'])
+
+name = 'agdb'
+
+inc = [
+    env.Dir('./debuggingContext'),
+    env.Dir('./commandLine'),
+    env.Dir('./commands'),
+    env.Dir('./common'),
+    env.Dir('./gdbProxy'),
+    env.Dir('./include'),
+]
+src = [
+    env.Glob('./debuggingContext/src/*.cpp'),
+    env.Glob('./commandLine/src/*.cpp'),
+    env.Glob('./commands/src/*.cpp'),
+    env.Glob('./common/src/*.cpp'),
+    env.Glob('./*.cpp'),
+]
+
+deps = ['libmigdb', 'mili', 'moirai', 'ncurses', 'readline']
+env.CreateProgram(name, inc, src, deps)

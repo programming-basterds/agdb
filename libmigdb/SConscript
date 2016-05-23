@@ -1,0 +1,13 @@
+Import('env')
+
+#env['CC'] = "clang-3.7"
+#env['CXX'] = "clang++-3.7"
+name = 'libmigdb'
+ext_inc = env.Dir('./src')
+inc = []
+
+src = env.Glob('./src/*.c')
+
+deps = ['pthread']
+
+env.CreateStaticLibrary(name, inc, ext_inc, src, deps)

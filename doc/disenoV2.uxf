@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>11</zoom_level>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>330</y>
+      <w>110</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>/IBreakpoint/
+--
++ kick()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>572</x>
+      <y>935</y>
+      <w>242</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>/ICommand/
+--
++ execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1001</y>
+      <w>231</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>RaiseCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>715</x>
+      <y>1463</y>
+      <w>275</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>MultiBreakpointCommand
+--
+- execute(Arguments args)
+--
+-MultiBreakpointRegistry registry</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1397</y>
+      <w>231</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>ExitCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1067</y>
+      <w>220</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>InfoCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>22</x>
+      <y>1155</y>
+      <w>319</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>MultiBreakpointRegistry
+--
+- std::list&lt;MultiBreakpoint*&gt; mbrSet</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>660</y>
+      <w>528</w>
+      <h>352</h>
+    </coordinates>
+    <panel_attributes>MultiBreakpoint
+--
++ MultiBreakpoint(Context&amp;, WeaveAspects*, WeaveAspects* )
+--
+- std::atomic&lt;bool&gt; hittedConditional
+- Context&amp; context
+- WeaveAspects* conditionalInstance
+- WeaveAspects* inconditionalInstance
+- IHitBreakpointObserver* conditionalBreakpointObs
+- IHitBreakpointObserver* inconditionalBreakpointObs
+
+{innerclass
+ConditionalHitBreakpointObsever
+--
++ ConditionalHitBreakpointObserver(IMultiBreakpointInernal*)
+- IMultiBreakpointInernal* const instanceMBRInternal
+innerclass}
+{innerclass
+InconditionalHitBreakpointObsever
+--
++ InconditionalHitBreakpointObsever(IMultiBreakpointInernal*)
+- IMultiBreakpointInernal* const instanceMBRInternal
+innerclass}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>682</x>
+      <y>726</y>
+      <w>242</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>/IUseHitBreakpointObserver/
+--
++ hit(IUserBreakpoint*)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>495</x>
+      <y>704</y>
+      <w>208</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>187;33;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>550</x>
+      <y>594</y>
+      <w>330</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Context
+--
++  void addInstance(WeaveAspects*)
+--
+- std::list&lt;WeaveAspects*&gt; gdbInstances
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>869</x>
+      <y>869</y>
+      <w>286</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Interpreter
+--
+-std::list&lt;ICommand*&gt; commands
+--
+- Context context</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>341</x>
+      <y>583</y>
+      <w>230</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>33;77;33;33;209;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>132</x>
+      <y>979</y>
+      <w>54</w>
+      <h>197</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0..n
+</panel_attributes>
+    <additional_attributes>33;176;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>561</x>
+      <y>429</y>
+      <w>484</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>Breakpoint
+--
++ Breakpoint(IHitBreakpointObserver, IBreakpointInternal*)
+- enable()
+- disable()
+- kick()
+--
+- IBreakpointInternal* const internalInterface
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>792</x>
+      <y>77</y>
+      <w>319</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>/IBreakpointInternal/
+--
+- enableBreakpoint
+- disableBreakpoint</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>396</x>
+      <y>154</y>
+      <w>351</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0..n</panel_attributes>
+    <additional_attributes>33;33;33;66;275;66;275;209;330;209</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>583</x>
+      <y>869</y>
+      <w>307</w>
+      <h>87</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1..n</panel_attributes>
+    <additional_attributes>286;33;33;33;33;66</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>748</x>
+      <y>341</y>
+      <w>54</w>
+      <h>109</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>33;33;33;88</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>671</x>
+      <y>77</y>
+      <w>142</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+         private</panel_attributes>
+    <additional_attributes>121;55;33;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>209</y>
+      <w>143</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>/IUserBreakpoint/
+--
++ id()
++ enable()
++ disable()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>748</x>
+      <y>264</y>
+      <w>54</w>
+      <h>87</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>33;33;33;66</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>121</x>
+      <y>473</y>
+      <w>308</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>/IMultiBreakpointInternal/
+--
++ conditionalHit (IUserBreakpoint*)
++ inconditionalHit (IUserBReakpint*)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>154</x>
+      <y>517</y>
+      <w>118</w>
+      <h>164</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+  private</panel_attributes>
+    <additional_attributes>66;33;66;143</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1331</y>
+      <w>231</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>ListCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1265</y>
+      <w>220</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>KillCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1199</y>
+      <w>220</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>BacktraceCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>726</x>
+      <y>1133</y>
+      <w>231</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>PrintCommand
+--
+- execute(Arguments args)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>957</y>
+      <w>54</w>
+      <h>538</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>33;33;33;517</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>990</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1056</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1133</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1199</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1265</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1331</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1386</y>
+      <w>175</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;154;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>572</x>
+      <y>1441</y>
+      <w>164</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>33;33;143;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>132</x>
+      <y>1199</y>
+      <w>604</w>
+      <h>329</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>583;308;33;308;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>429</x>
+      <y>726</y>
+      <w>274</w>
+      <h>109</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>253;33;33;33;33;88</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>484</x>
+      <y>748</y>
+      <w>241</w>
+      <h>219</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>220;33;220;132;66;132;66;198;33;198</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>352</x>
+      <y>253</y>
+      <w>286</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>template= class NextType  
+&lt;&lt;inherit from NextType&gt;
+GdbProxyAspect
+--
++ setGdbPath (string)
+--
+- mi_h* handler
+- string path
+- string program</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>55</x>
+      <y>242</y>
+      <w>286</w>
+      <h>198</h>
+    </coordinates>
+    <panel_attributes>template= class NextType
+&lt;&lt;inherit from NextType&gt;
+RaiseAspect
+--
++ runLocal()
++ connectLocal()
++ disconnectLocal()
++ connectRemote()
++ runRemote()
++ disconnectRemote()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>154</x>
+      <y>0</y>
+      <w>616</w>
+      <h>187</h>
+    </coordinates>
+    <panel_attributes>template= class NextType  
+&lt;&lt;inherit from NextType&gt;
+BreakpointAspect
+--
++addConditionalBreakpoint (IHitBreakpointObserver*, file, line, cond)
++addBreakpoint (IHitBreakpointObserver*, file, line)
+-enableBreakpoint(IBreakpoint*)
+-disableBreakpoint(IBreakpoint*)
+--
+- unordered_map&lt;BreakpointID, IBreakpoint*&gt; breakpoints</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Note</type>
+    <coordinates>
+      <x>891</x>
+      <y>594</y>
+      <w>319</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Note..
+WeaveAspects are  the weave of all
+the aspects. The last (base) class 
+of it should be GdbProxyAspect</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>880</x>
+      <y>121</y>
+      <w>54</w>
+      <h>329</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>33;33;33;308</additional_attributes>
+  </element>
+</diagram>
