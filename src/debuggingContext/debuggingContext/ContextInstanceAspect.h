@@ -84,7 +84,7 @@ NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(NSGdbProx
     const auto instanceId = gdbInstances.emplace(instance);
     instance->registerTerminationCallback([this, instance, instanceId]()
     {
-        std::thread([this, instance, instanceId]()
+        std::thread([this, instanceId]()
         {
             this->gdbInstances.remove(instanceId);
         }).detach();

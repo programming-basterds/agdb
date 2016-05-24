@@ -49,9 +49,9 @@ void BreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Conte
 
     const auto breakpointId = ctx.addBreakpoint(breakpoint);
     instance.registerTerminationCallback([&ctx, breakpointId]()
-        {
-            ctx.removeBreakpoint(breakpointId);
-        });
+    {
+        ctx.removeBreakpoint(breakpointId);
+    });
 
     std::cout << "Breakpoint " << breakpointId << " created." << std::endl;
 }
