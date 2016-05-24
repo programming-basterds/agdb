@@ -4,7 +4,8 @@
  *                  Taller Technologies.
  *
  * @file        RaiseLocalCommand.cpp
- * @author      Emanuel Bringas, Leonardo Boquillón
+ * @author      Emanuel Bringas
+ * @author      Leonardo Boquillón
  * @date        2016-05-04
  * @brief
  *
@@ -45,13 +46,6 @@ void RaiseLocalCommand::execute(const Arguments& args, NSDebuggingContext::Conte
 
     const auto nid = ctx.addGdbInstance(proxy);
     ctx.setCurrentInstance(nid);
-/*
-
-    proxy->registerTerminationCallback([breakpointId]()
-    {
-
-            ???????????
-    });*/
 
     std::cout << "Instance number " << nid << std::endl;
 }

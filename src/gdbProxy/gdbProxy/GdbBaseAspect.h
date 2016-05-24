@@ -200,7 +200,8 @@ void GdbBaseAspect<Type>::continueExecution()
 template<class Type>
 void GdbBaseAspect<Type>::waitForFinalization()
 {
-    thread.join();
+    if(thread.joinable())
+        thread.join();
 }
 
 template<class Type>

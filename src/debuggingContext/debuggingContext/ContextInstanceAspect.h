@@ -81,15 +81,15 @@ protected:
 template<class NextAspect>
 NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(NSGdbProxy::GdbProxy* const instance)
 {
-    currentInstance = gdbInstances.emplace(instance);
-    return currentInstance;
-}
-
-template<class NextAspect>
-NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(std::unique_ptr<NSGdbProxy::GdbProxy>&& instance)
-{
-    currentInstance = gdbInstances.emplace(std::move(instance));
-    return currentInstance;
+    const auto instanceId = gdbInstances.emplace(instance);
+    instance->registerTerminationCallback([this, instance, instanceId]()
+    {
+        std::thread([this, instance, instanceId]()
+        {
+            this->gdbInstances.remove(instanceId);
+        }).detach();
+    });
+    return instanceId;
 }
 
 template<class NextAspect>
