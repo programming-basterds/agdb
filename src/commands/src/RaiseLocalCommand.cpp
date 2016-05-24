@@ -43,8 +43,16 @@ void RaiseLocalCommand::execute(const Arguments& args, NSDebuggingContext::Conte
 
     proxy->run();
 
-    const auto nid = ctx.addGdbInstance(std::move(proxy));
+    const auto nid = ctx.addGdbInstance(proxy);
     ctx.setCurrentInstance(nid);
+/*
+
+    proxy->registerTerminationCallback([breakpointId]()
+    {
+
+            ???????????
+    });*/
+
     std::cout << "Instance number " << nid << std::endl;
 }
 

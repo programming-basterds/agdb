@@ -35,8 +35,12 @@ namespace NSCommon
 template<class Index, class Value>
 class IncrementalContainer
 {
+    using InnerContainer = std::unordered_map<Index, Value>;
+
 public:
-    static_assert(std::is_integral<int>::value, "Index must be integral.");
+    static_assert(std::is_integral<Index>::value, "Index must be integral.");
+
+    using const_iterator = typename InnerContainer::const_iterator;
 
     template<class... Args>
     Index emplace(Args&&... args)
@@ -52,19 +56,44 @@ public:
         return _container.erase(index) != 0u;
     }
 
+    bool exists(Index index) const
+    {
+        return _container.count(index) != 0u;
+    }
+
+    const Value& get(Index index) const
+    try
+    {
+        return _container.at(index);
+    }
+    catch (std::out_of_range)
+    {
+        throw NSCommon::InvalidMultibreakpoint();
+    }
+
     Value& get(Index index)
     try
     {
         return _container.at(index);
     }
-    catch (...)
+    catch (std::out_of_range)
     {
         throw NSCommon::InvalidMultibreakpoint();
     }
 
+    const_iterator cbegin() const
+    {
+        return _container.cbegin();
+    }
+
+    const_iterator cend() const
+    {
+        return _container.cend();
+    }
+
 private:
-    std::unordered_map<Index, Value> _container;
-    Index                            _lastIndex = Index(0);
+    InnerContainer _container;
+    Index          _lastIndex = Index(0);
 };
 
 } // namespace NSCommon

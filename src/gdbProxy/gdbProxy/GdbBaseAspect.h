@@ -74,7 +74,9 @@ public:
 
 protected:
 
-    virtual void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) = 0;
+    virtual void processStopReason(mi_output* const response,
+                                   const NSCommon::StopReason& stopReason,
+                                   moirai::PostIterationAction& nextAction) = 0;
 
     mi_h*               handler;
     std::string         path;

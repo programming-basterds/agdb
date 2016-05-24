@@ -54,9 +54,10 @@ public:
     using NextAspect::NextAspect;
 
     MultiBreakpointId addMultiBreakpoint(MultiBreakpoint* const mbr);
-    MultiBreakpoint* getMultiBreakpoint(MultiBreakpointId id); // SHARED?
+    MultiBreakpoint* getMultiBreakpoint(MultiBreakpointId id);
     BreakpointId addBreakpoint(const std::shared_ptr<IUserBreakpoint>& breakpoint);
     std::shared_ptr<IUserBreakpoint> getBreakpoint(BreakpointId id);
+    bool removeBreakpoint(BreakpointId id);
 
 protected:
 
@@ -86,6 +87,12 @@ template<class NextAspect>
 std::shared_ptr<IUserBreakpoint> ContextMultiBreakpointAspect<NextAspect>::getBreakpoint(BreakpointId id)
 {
     return _breakpoints.get(id);
+}
+
+template<class NextAspect>
+bool ContextMultiBreakpointAspect<NextAspect>::removeBreakpoint(BreakpointId id)
+{
+    return _breakpoints.remove(id);
 }
 
 } // end namespace NSDebuggingContext

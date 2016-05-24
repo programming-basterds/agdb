@@ -52,7 +52,7 @@ class MultiInterruptCommand : public ICommand
     {
         for (auto& proxy : ctx)
         {
-            proxy->interrupt();
+            proxy.second->interrupt();
         }
     }
 
