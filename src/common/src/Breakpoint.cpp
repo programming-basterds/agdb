@@ -36,7 +36,6 @@ Breakpoint::Breakpoint(Callback callback, mi_bkpt* breakpointImple,
 
 Breakpoint::~Breakpoint()
 {
-    _internals->deleteBreakpoint(this);
     mi_free_bkpt(_breakpoint);
 }
 
