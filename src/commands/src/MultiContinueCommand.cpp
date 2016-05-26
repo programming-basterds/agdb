@@ -35,7 +35,7 @@ void MultiContinueCommand::execute(const Arguments& args, NSDebuggingContext::Co
     {
         for (auto& proxy : ctx)
         {
-            proxy->continueExecution();
+            proxy.second->continueExecution();
         }
     }
     else

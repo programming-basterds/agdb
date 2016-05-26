@@ -74,7 +74,9 @@ public:
 
 protected:
 
-    virtual void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) = 0;
+    virtual void processStopReason(mi_output* const response,
+                                   const NSCommon::StopReason& stopReason,
+                                   moirai::PostIterationAction& nextAction) = 0;
 
     mi_h*               handler;
     std::string         path;
@@ -198,7 +200,10 @@ void GdbBaseAspect<Type>::continueExecution()
 template<class Type>
 void GdbBaseAspect<Type>::waitForFinalization()
 {
-    thread.join();
+    if(thread.joinable())
+    {
+        thread.join();
+    }
 }
 
 template<class Type>

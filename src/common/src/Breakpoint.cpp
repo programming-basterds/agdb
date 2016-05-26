@@ -34,6 +34,11 @@ Breakpoint::Breakpoint(Callback callback, mi_bkpt* breakpointImple,
     _internals(internals)
 {}
 
+Breakpoint::~Breakpoint()
+{
+    mi_free_bkpt(_breakpoint);
+}
+
 Breakpoint::BreakpointID Breakpoint::id() const
 {
     return _breakpoint->number;

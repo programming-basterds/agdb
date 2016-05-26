@@ -46,7 +46,13 @@ void BreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Conte
         std::cout << "Breakpoint in instance " << instanceId << std::endl;
         nextAction = moirai::SuspendLooping;
     });
+
     const auto breakpointId = ctx.addBreakpoint(breakpoint);
+    instance.registerTerminationCallback([&ctx, breakpointId]()
+    {
+        ctx.removeBreakpoint(breakpointId);
+    });
+
     std::cout << "Breakpoint " << breakpointId << " created." << std::endl;
 }
 

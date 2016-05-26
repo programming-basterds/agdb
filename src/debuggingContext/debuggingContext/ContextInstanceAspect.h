@@ -31,24 +31,26 @@
 #include <memory>
 #include <cassert>
 #include "common/exceptions.h"
+#include "common/incrementalContainer.h"
 #include "gdbProxy/GdbProxy.h"
 
 namespace NSDebuggingContext
 {
 
-// TODO: Create an interator class rather than make the proxy iterable
+using NSCommon::IncrementalContainer;
+
 template<class NextAspect>
 class ContextInstanceAspect : public NextAspect
 {
 
 private:
-    //TODO: emplace instead of pointers, and implement move assignation and constructor in proxy
-    using InstancesVector = typename std::vector<std::unique_ptr<NSGdbProxy::GdbProxy>>;
+
+    using InstancesContainer = IncrementalContainer<NSCommon::InstanceId, std::unique_ptr<NSGdbProxy::GdbProxy>>;
 
 public:
     using NextAspect::NextAspect;
 
-    using InstancesIterator = typename InstancesVector::const_iterator;
+    using const_iterator = typename InstancesContainer::const_iterator;
 
     static constexpr NSCommon::InstanceId NoInstance = 0u;
 
@@ -62,38 +64,35 @@ public:
 
     void setCurrentInstance(NSCommon::InstanceId id);
 
-    InstancesIterator begin() const;
+    const_iterator begin() const;
 
-    InstancesIterator end() const;
+    const_iterator end() const;
 
 protected:
 
-    InstancesVector gdbInstances;
+    InstancesContainer      gdbInstances;
 
-    NSCommon::InstanceId      currentInstance = NoInstance;
+    NSCommon::InstanceId    currentInstance = NoInstance;
 };
 
 template<class NextAspect>
 NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(NSGdbProxy::GdbProxy* const instance)
 {
-    gdbInstances.emplace_back(instance);
-    currentInstance = gdbInstances.size();
-    return currentInstance;
-}
-
-template<class NextAspect>
-NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(std::unique_ptr<NSGdbProxy::GdbProxy>&& instance)
-{
-    gdbInstances.emplace_back(std::move(instance));
-    currentInstance = gdbInstances.size();
-    return currentInstance;
+    const auto instanceId = gdbInstances.emplace(instance);
+    instance->registerTerminationCallback([this, instance, instanceId]()
+    {
+        std::thread([this, instanceId]()
+        {
+            this->gdbInstances.remove(instanceId);
+        }).detach();
+    });
+    return instanceId;
 }
 
 template<class NextAspect>
 NSGdbProxy::GdbProxy& ContextInstanceAspect<NextAspect>::getInstance(NSCommon::InstanceId id) const
 {
-    mili::assert_throw<NSCommon::WrongInstanceNumber>(id >= NoInstance and id <= gdbInstances.size());
-    return *gdbInstances.at(id - 1u);
+    return *gdbInstances.get(id);
 }
 
 template<class NextAspect>
@@ -105,7 +104,7 @@ NSCommon::InstanceId ContextInstanceAspect<NextAspect>::getCurrentInstance() con
 template<class NextAspect>
 void ContextInstanceAspect<NextAspect>::setCurrentInstance(NSCommon::InstanceId id)
 {
-    if (id > gdbInstances.size())
+    if (!gdbInstances.exists(id))
     {
         throw NSCommon::WrongInstanceNumber(std::to_string(id));
     }
@@ -113,14 +112,14 @@ void ContextInstanceAspect<NextAspect>::setCurrentInstance(NSCommon::InstanceId 
 }
 
 template<class NextAspect>
-typename ContextInstanceAspect<NextAspect>::InstancesIterator
+typename ContextInstanceAspect<NextAspect>::const_iterator
 ContextInstanceAspect<NextAspect>::begin() const
 {
     return gdbInstances.cbegin();
 }
 
 template<class NextAspect>
-typename ContextInstanceAspect<NextAspect>::InstancesIterator
+typename ContextInstanceAspect<NextAspect>::const_iterator
 ContextInstanceAspect<NextAspect>::end() const
 {
     return gdbInstances.cend();

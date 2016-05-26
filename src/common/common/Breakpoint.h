@@ -85,9 +85,9 @@ public:
     Breakpoint(Callback callback, mi_bkpt* breakpointImple,
                IBreakpointProxy* const internals);
 
-    Breakpoint() = delete;
-
     Breakpoint& operator=(Breakpoint&) = delete;
+
+    ~Breakpoint();
 
 private:
 
