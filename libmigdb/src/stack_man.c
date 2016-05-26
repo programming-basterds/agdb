@@ -42,7 +42,9 @@ void mi_stack_list_arguments(mi_h *h, int show, int from, int to)
 
 void mi_stack_info_frame(mi_h *h)
 {
- mi_send(h,"frame\n");
+    /* Changed by Ema */
+    /* mi_send(h,"frame\n");  */
+    mi_send(h,"-stack-info-frame\n");
 }
 
 void mi_stack_info_depth(mi_h *h, int depth)
@@ -72,7 +74,7 @@ void mi_stack_list_locals(mi_h *h, int show)
 
   Command: -stack-list-frames
   Return:  A new list of mi_frames or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_frames *gmi_stack_list_frames(mi_h *h)
@@ -83,13 +85,13 @@ mi_frames *gmi_stack_list_frames(mi_h *h)
 
 /**[txh]********************************************************************
 
-  Description: 
+  Description:
   List of frames. Arguments aren't filled. Only the frames in the @var{from}
  - @var{to} range are returned.
-  
+
   Command: -stack-list-frames
   Return:  A new list of mi_frames or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_frames *gmi_stack_list_frames_r(mi_h *h, int from, int to)
@@ -102,10 +104,10 @@ mi_frames *gmi_stack_list_frames_r(mi_h *h, int from, int to)
 
   Description:
   List arguments. Only @var{level} and @var{args} filled.
-  
+
   Command: -stack-list-arguments
   Return:  A new list of mi_frames or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_frames *gmi_stack_list_arguments(mi_h *h, int show)
@@ -119,10 +121,10 @@ mi_frames *gmi_stack_list_arguments(mi_h *h, int show)
   Description:
   List arguments. Only @var{level} and @var{args} filled. Only for the
 frames in the @var{from} - @var{to} range.
-  
+
   Command: -stack-list-arguments
   Return:  A new list of mi_frames or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_frames *gmi_stack_list_arguments_r(mi_h *h, int show, int from, int to)
@@ -138,7 +140,7 @@ mi_frames *gmi_stack_list_arguments_r(mi_h *h, int show, int from, int to)
 
   Command: -stack-info-frame [using frame]
   Return: A new mi_frames or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_frames *gmi_stack_info_frame(mi_h *h)
@@ -154,7 +156,7 @@ mi_frames *gmi_stack_info_frame(mi_h *h)
 
   Command: -stack-info-depth
   Return: The depth or -1 on error.
-  
+
 ***************************************************************************/
 
 int gmi_stack_info_depth(mi_h *h, int max_depth)
@@ -179,8 +181,8 @@ int gmi_stack_info_depth(mi_h *h, int max_depth)
 
   Command: -stack-info-depth [no args]
   Return: The depth or -1 on error.
-  Example: 
-  
+  Example:
+
 ***************************************************************************/
 
 int gmi_stack_info_depth_get(mi_h *h)
@@ -195,7 +197,7 @@ int gmi_stack_info_depth_get(mi_h *h)
 
   Command: -stack-select-frame
   Return: !=0 OK
-  
+
 ***************************************************************************/
 
 int gmi_stack_select_frame(mi_h *h, int framenum)
@@ -211,7 +213,7 @@ int gmi_stack_select_frame(mi_h *h, int framenum)
 
   Command: -stack-list-locals
   Return: A new mi_results tree containing the variables or NULL on error.
-  
+
 ***************************************************************************/
 
 mi_results *gmi_stack_list_locals(mi_h *h, int show)

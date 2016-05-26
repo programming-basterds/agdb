@@ -50,7 +50,13 @@ COMMANDS_TABLE(QuitCommand,                     "quit",       "Terminate agdb"  
 COMMANDS_TABLE(RaiseLocalCommand,               "raise",      "raise command"                                        ) SEPARATOR
 COMMANDS_TABLE(RaiseRemoteCommand,              "rraise",     "raise a remote program"                               ) SEPARATOR
 COMMANDS_TABLE(StepCommand,                     "step",       "Next line of code. Get inside functions"              ) SEPARATOR
+COMMANDS_TABLE(DiffCommand,                     "diff",       "Stop whe the given instances differs"                 ) SEPARATOR
 COMMANDS_TABLE(ShowVersion,                     "version",    "Show version of agdb"                                 ) LAST_SEPARATOR
+
+#undef SEPARATOR
+#undef LAST_SEPARATOR
+#undef COMMANDS_TABLE
+
 
 #undef SEPARATOR
 #undef LAST_SEPARATOR
