@@ -47,9 +47,6 @@ private:
 
     using InstancesContainer = IncrementalContainer<NSCommon::InstanceId, std::unique_ptr<NSGdbProxy::GdbProxy>>;
 
-    //TODO: emplace instead of pointers, and implement move assignation and constructor in proxy
-    //using InstancesVector = typename std::vector<std::unique_ptr<NSGdbProxy::GdbProxy>>;
-
 public:
     using NextAspect::NextAspect;
 
