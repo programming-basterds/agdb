@@ -50,6 +50,7 @@ COMMANDS_TABLE(IgnoreBreakpointCommand,         "ignore",     "Ignore breakpoint
 COMMANDS_TABLE(MultiBreakpointCommand,          "mbr",        "Multibreakpoint command"                              ) SEPARATOR
 COMMANDS_TABLE(EnableMultibreakpointCommand,    "enambr",     "enable Multibreakpoint"                               ) SEPARATOR
 COMMANDS_TABLE(DisableMultibreakpointCommand,   "dismbr",     "disable Multibreakpoint"                              ) SEPARATOR
+COMMANDS_TABLE(DiffCommand,                     "diff",       "Stop whe the given instances differs"                 ) SEPARATOR
 COMMANDS_TABLE(IgnoreMultibreakpointCommand,    "ignmbr",     "ignore Multibreakpoint"                               ) LAST_SEPARATOR
 
 #undef SEPARATOR
