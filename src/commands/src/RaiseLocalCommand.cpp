@@ -6,6 +6,7 @@
  * @file        RaiseLocalCommand.cpp
  * @author      Emanuel Bringas
  * @author      Leonardo Boquillón
+ * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *

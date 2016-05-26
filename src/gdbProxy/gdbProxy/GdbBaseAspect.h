@@ -201,7 +201,9 @@ template<class Type>
 void GdbBaseAspect<Type>::waitForFinalization()
 {
     if(thread.joinable())
+    {
         thread.join();
+    }
 }
 
 template<class Type>
