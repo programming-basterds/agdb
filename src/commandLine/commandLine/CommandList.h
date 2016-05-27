@@ -28,6 +28,7 @@
 #   define LAST_SEPARATOR SEPARATOR
 #endif
 
+
 COMMANDS_TABLE(BacktraceCommand,                "backtrace",  "Print backtrace of all stack frames"                  ) SEPARATOR
 COMMANDS_TABLE(BreakpointCommand,               "br",         "Add a break point"                                    ) SEPARATOR
 COMMANDS_TABLE(ContinueCommand,                 "continue",   "Continue current instance"                            ) SEPARATOR
@@ -36,7 +37,7 @@ COMMANDS_TABLE(DisableMultibreakpointCommand,   "dismbr",     "disable Multibrea
 COMMANDS_TABLE(EnableBreakpointCommand,         "enable",     "Enable breakpoint"                                    ) SEPARATOR
 COMMANDS_TABLE(EnableMultibreakpointCommand,    "enambr",     "enable Multibreakpoint"                               ) SEPARATOR
 COMMANDS_TABLE(FwdCommand,                      "fwd",        "Forward given string to gdb interpreter"              ) SEPARATOR
-COMMANDS_TABLE(HelpCommand,                     "help",       "Show this help"                                       ) SEPARATOR
+COMMANDS_TACOMMANDS_TABLE(DiffCommand,   BLE(HelpCommand,                     "help",       "Show this help"                                       ) SEPARATOR
 COMMANDS_TABLE(IgnoreBreakpointCommand,         "ignore",     "Ignore breakpoint"                                    ) SEPARATOR
 COMMANDS_TABLE(IgnoreMultibreakpointCommand,    "ignmbr",     "ignore Multibreakpoint"                               ) SEPARATOR
 COMMANDS_TABLE(InstanceCommand,                 "instance",   "Instance manager"                                     ) SEPARATOR
@@ -52,11 +53,6 @@ COMMANDS_TABLE(RaiseRemoteCommand,              "rraise",     "raise a remote pr
 COMMANDS_TABLE(StepCommand,                     "step",       "Next line of code. Get inside functions"              ) SEPARATOR
 COMMANDS_TABLE(DiffCommand,                     "mdiff",      "Stop whe the given instances differs"                 ) SEPARATOR
 COMMANDS_TABLE(ShowVersion,                     "version",    "Show version of agdb"                                 ) LAST_SEPARATOR
-
-#undef SEPARATOR
-#undef LAST_SEPARATOR
-#undef COMMANDS_TABLE
-
 
 #undef SEPARATOR
 #undef LAST_SEPARATOR
