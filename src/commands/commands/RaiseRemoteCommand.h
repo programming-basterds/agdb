@@ -28,12 +28,12 @@
 #define _RAISE_REMOTE_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class RaiseRemoteCommand : public ICommand
+class RaiseRemoteCommand : public ArgumentedCommand
 {
 private:
     enum ArgsIndex

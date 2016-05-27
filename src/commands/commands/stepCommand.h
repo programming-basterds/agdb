@@ -28,12 +28,12 @@
 #define _STEP_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class StepCommand : public ICommand
+class StepCommand : public ArgumentedCommand
 {
 private:
     enum ArgsIndex

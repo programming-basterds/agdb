@@ -29,7 +29,7 @@
 
 #include <string>
 #include "common/exceptions.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
@@ -40,7 +40,7 @@ namespace NSCommands
  * @details Usage:
  *              list: [filename line numberOfLine]
  */
-class ListCommand : public ICommand
+class ListCommand : public ArgumentedCommand
 {
     using LineIndex = unsigned;
     using Message = std::string;

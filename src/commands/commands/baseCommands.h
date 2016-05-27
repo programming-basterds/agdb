@@ -27,12 +27,12 @@
 #ifndef _BASE_COMMANDS_H_
 #define _BASE_COMMANDS_H_
 
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class NoArgsCommand : public ICommand
+class NoArgsCommand : public ArgumentedCommand
 {
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override final
     {

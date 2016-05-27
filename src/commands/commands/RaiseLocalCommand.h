@@ -29,12 +29,12 @@
 #define _RAISE_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class RaiseLocalCommand : public ICommand
+class RaiseLocalCommand : public ArgumentedCommand
 {
 private:
     enum ArgsIndex

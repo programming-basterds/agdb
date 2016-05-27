@@ -40,18 +40,6 @@ void HelpCommand::execute(NSDebuggingContext::Context& /*ctx*/)
 #include "commandLine/CommandList.h"
 }
 
-Arguments Interpreter::getArguments(const std::string& str)
-{
-    Arguments ret;
-    Argument arg;
-    std::stringstream ss(str);
-    while (ss >> arg)
-    {
-        ret.emplace_back(std::move(arg));
-    }
-    return ret;
-}
-
 void Interpreter::execute(const std::string& line)
 {
     const auto separator = line.find(':');
@@ -61,7 +49,7 @@ void Interpreter::execute(const std::string& line)
         const auto cmd = _commands.find(cmdName);
         if (cmd != _commands.end())
         {
-            cmd->second->execute(getArguments(line.substr(separator + 1)), _ctx);
+            cmd->second->execute(line.substr(separator + 1), _ctx);
         }
         else
         {

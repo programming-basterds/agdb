@@ -27,12 +27,12 @@
 #ifndef _INSTANCE_COMMAND_H
 #define _INSTANCE_COMMAND_H
 
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class InstanceCommand : public ICommand
+class InstanceCommand : public ArgumentedCommand
 {
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };

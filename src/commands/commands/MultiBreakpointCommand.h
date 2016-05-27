@@ -30,12 +30,12 @@
 #define _MULTI_BREAKPOINT_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class MultiBreakpointCommand : public ICommand
+class MultiBreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -52,10 +52,10 @@ class MultiBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-class EnableMultibreakpointCommand : public ICommand
+class EnableMultibreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -64,10 +64,10 @@ class EnableMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-class DisableMultibreakpointCommand : public ICommand
+class DisableMultibreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -76,10 +76,10 @@ class DisableMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-class IgnoreMultibreakpointCommand : public ICommand
+class IgnoreMultibreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -89,7 +89,7 @@ class IgnoreMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
 } // namespace NSCommands

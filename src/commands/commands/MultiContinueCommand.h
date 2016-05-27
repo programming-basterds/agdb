@@ -28,14 +28,14 @@
 #define _MULTI_CONTINUE_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class MultiContinueCommand : public ICommand
+class MultiContinueCommand : public ArgumentedCommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

@@ -76,7 +76,6 @@ private:
     const std::unordered_map<std::string, ICommand*> _commands;
     NSDebuggingContext::Context& _ctx;
 
-    static Arguments getArguments(const std::string& str);
 };
 
 } // namespace NSCommandLine

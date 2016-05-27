@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        ContinueCommand.h
- * @author      Emanuel Brinags
- * @date        2016-05-11
- * @brief
+ * @file        argumentedCommand.cpp
+ * @author      Francisco Herrero
+ * @date        2016-05-27
+ * @brief       ArgumentedCommand class definition.
  *
  * This file is part of agdb
  *
@@ -24,20 +24,27 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONTINUE_COMMAND_INCLUDE_H_
-#define _CONTINUE_COMMAND_INCLUDE_H_
-
-#include "debuggingContext/Context.h"
 #include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class ContinueCommand : public ArgumentedCommand
+Arguments ArgumentedCommand::getArguments(const Expression& expression)
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
-};
+    Arguments arguments;
+    std::stringstream ss(expression);
+    Argument arg;
+    while (ss >> arg);
+    {
+        arguments.push_back(std::move(arg));
+        arg = Argument();
+    }
+    return arguments;
+}
+
+void ArgumentedCommand::execute(const Expression& expression, NSDebuggingContext::Context& ctx)
+{
+    execute(getArguments(expression), ctx);
+}
 
 } // namespace NSCommands
-
-#endif /* _CONTINUE_COMMAND_INCLUDE_H_ */

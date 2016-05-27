@@ -29,12 +29,12 @@
 #define BREAKPOINT_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-class BreakpointCommand : public ICommand
+class BreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -46,10 +46,10 @@ class BreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
-class EnableBreakpointCommand : public ICommand
+class EnableBreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -58,10 +58,10 @@ class EnableBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
-class DisableBreakpointCommand : public ICommand
+class DisableBreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -70,10 +70,10 @@ class DisableBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
-class IgnoreBreakpointCommand : public ICommand
+class IgnoreBreakpointCommand : public ArgumentedCommand
 {
     enum ArgsIndex
     {
@@ -83,7 +83,7 @@ class IgnoreBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands
