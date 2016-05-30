@@ -29,12 +29,12 @@
 
 #include <string>
 #include "common/exceptions.h"
-#include "commands/argumentedCommand.h"
+#include "commands/ICommand.h"
 
 namespace NSCommands
 {
 
-class PrintCommand : public ArgumentedCommand
+class PrintCommand : public ICommand
 {
     using Message = std::string;
 

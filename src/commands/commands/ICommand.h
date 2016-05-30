@@ -5,7 +5,6 @@
  *
  * @file        ICommand.h
  * @author      Leonardo Boquillón
- * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *
@@ -28,6 +27,7 @@
 #ifndef _I_COMMAND_INCLUDE_H_
 #define _I_COMMAND_INCLUDE_H_
 
+#include <vector>
 #include <string>
 
 #include "debuggingContext/Context.h"
@@ -35,13 +35,12 @@
 namespace NSCommands
 {
 
-using Expression = std::string;
+using Argument = std::string;
+using Arguments = std::vector<Argument>;
 
 struct ICommand
 {
-    virtual void execute(const Expression& expression, NSDebuggingContext::Context& ctx) = 0;
-
-    virtual ~ICommand() = default;
+    virtual void execute(const Arguments& args, NSDebuggingContext::Context& ctx) = 0;
 };
 
 } // namespace NSCommands

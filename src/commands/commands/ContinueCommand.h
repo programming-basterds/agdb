@@ -28,14 +28,14 @@
 #define _CONTINUE_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/argumentedCommand.h"
+#include "commands/ICommand.h"
 
 namespace NSCommands
 {
 
-class ContinueCommand : public ArgumentedCommand
+class ContinueCommand : public ICommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
 };
 
 } // namespace NSCommands

@@ -28,12 +28,12 @@
 #define _FWD_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/argumentedCommand.h"
+#include "commands/ICommand.h"
 
 namespace NSCommands
 {
 
-class FwdCommand : public ArgumentedCommand
+class FwdCommand : public ICommand
 {
 private:
     enum ArgsIndex

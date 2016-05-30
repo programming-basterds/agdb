@@ -29,12 +29,12 @@
 
 #include <string>
 #include "common/exceptions.h"
-#include "commands/argumentedCommand.h"
+#include "ICommand.h"
 
 namespace NSCommands
 {
 
-class MultiInterruptCommand : public ArgumentedCommand
+class MultiInterruptCommand : public ICommand
 {
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override
     {

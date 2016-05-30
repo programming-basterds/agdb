@@ -35,7 +35,6 @@ using NSDebuggingContext::BreakpointId;
 using NSDebuggingContext::MultiBreakpointId;
 
 /*Poor man version: mbr NID1 location1 number1 when NID2 location2 number2 if cond */
-/*version: mbr NID1 location1:number1 when NID2 location2:number2 [if cond] [then stop] */
 
 void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
@@ -44,14 +43,11 @@ void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::
     auto mbc = new NSDebuggingContext::MultiBreakpoint();
 
     auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1]));
-    const BreakpointLocation location1({args[Location1], mili::from_string<size_t>(args[Line1])});
+    const BreakpointLocation location1({args[Location1], mili::from_string<size_t>(args[Line1]), std::string{}});
     mbc->addInconditionalBreakpoint(instance1, location1);
 
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2]));
-
-    const BreakpointLocation location2({args[Location2], mili::from_string<size_t>(args[Line2])});
-    //if(args[IfWord])
-
+    const BreakpointLocation location2({args[Location2], mili::from_string<size_t>(args[Line2]), args[Condition]});
     mbc->addConditionalBreakpoint(instance2, location2);
 
     auto mbrId = ctx.addMultiBreakpoint(mbc);
