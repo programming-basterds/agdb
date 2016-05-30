@@ -37,30 +37,25 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber2]));
     mili::assert_throw<NSCommon::InstancesAreNotStopped>(not instance1.isRunning() and not instance2.isRunning());
 
-    auto instancesAlive = false;
     auto framesAreEquals = false;
-    NSGdbProxy::GdbProxy::FramePoint f1, f2;
     do
     {
         const auto future1 = instance1.next();
         const auto future2 = instance2.next();
         future1.wait();
         future2.wait();
-        instancesAlive = instance1.isAlive() and instance2.isAlive();
-        if (instancesAlive)
+        if (instance1.isAlive() and instance2.isAlive())
         {
-            f1 = instance1.frame();
-            f2 = instance2.frame();
-            framesAreEquals = (f1 == f2);
+            framesAreEquals = (instance1.frame() == instance2.frame());
         }
-    } while (instancesAlive and framesAreEquals);
+    } while (instance1.isAlive() and instance2.isAlive() and framesAreEquals);
 
 
     if (not framesAreEquals)
     {
         std::cout << "A difference of exceution was found:" << std::endl;
-        std::cout << "Instance " << InstanceNumber1 << " " << f1 << std::endl;
-        std::cout << "Instance " << InstanceNumber2 << " " << f2 << std::endl;
+        std::cout << "Instance " << InstanceNumber1 << " " << instance1.frame() << std::endl;
+        std::cout << "Instance " << InstanceNumber2 << " " << instance2.frame() << std::endl;
     }
     else // (not instancesAlive)
     {

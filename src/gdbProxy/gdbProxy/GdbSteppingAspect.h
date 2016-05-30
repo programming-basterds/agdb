@@ -49,7 +49,7 @@ protected:
     void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
 
 private:
-    std::promise<bool>* _prm;
+    std::unique_ptr<std::promise<bool>> _prm;
 };
 
 
@@ -59,7 +59,7 @@ std::future<bool> GdbSteppingAspect<NextAspect>::next()
     const bool nextSuccess = (bool) gmi_exec_next(this->handler) != 0;
     this->threadLoop.resume();
     mili::assert_throw<NSCommon::SteppingExecutionFailed>(nextSuccess);
-    _prm = new std::promise<bool>();
+    _prm.reset(new std::promise<bool>());
     return _prm->get_future();
 }
 
@@ -83,7 +83,6 @@ inline void GdbSteppingAspect<NextAspect>::processStopReason(mi_output* const re
     if (_prm != nullptr)
     {
         _prm->set_value(stopByStepReason);
-        delete _prm;
     }
     NextAspect::processStopReason(response, stopReason, nextAction);
 }
