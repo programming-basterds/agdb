@@ -62,15 +62,9 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
         std::cout << "Instance " << InstanceNumber1 << " " << f1 << std::endl;
         std::cout << "Instance " << InstanceNumber2 << " " << f2 << std::endl;
     }
-    else if (not instancesAlive)
+    else // (not instancesAlive)
     {
-        std::cout << "Some program has stopped:" << std::endl;
-        std::cout << "Instance " << InstanceNumber1 << (instance1.isAlive() ? " still running" : " has stoped") << std::endl;
-        std::cout << "Instance " << InstanceNumber2 << (instance2.isAlive() ? " still running" : " has stoped") << std::endl;
-    }
-    else
-    {
-        std::cout << "Error occur while run diff command." << std::endl;
+        std::cout << "Some program has stopped" << std::endl;
     }
 }
 
