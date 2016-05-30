@@ -37,11 +37,10 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber2]));
     mili::assert_throw<NSCommon::InstancesAreNotStopped>(not instance1.isRunning() and not instance2.isRunning());
 
-    auto instancesAlive = instance1.isAlive() and instance2.isAlive();
-    auto f1 = instance1.frame();
-    auto f2 = instance2.frame();
-    auto framesAreEquals = (f1 == f2);
-    while (instancesAlive and framesAreEquals)
+    auto instancesAlive = false;
+    auto framesAreEquals = false;
+    NSGdbProxy::GdbProxy::FramePoint f1, f2;
+    do
     {
         const auto future1 = instance1.next();
         const auto future2 = instance2.next();
@@ -54,7 +53,8 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
             f2 = instance2.frame();
             framesAreEquals = (f1 == f2);
         }
-    }
+    } while (instancesAlive and framesAreEquals);
+
 
     if (not framesAreEquals)
     {
