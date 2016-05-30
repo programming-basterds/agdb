@@ -55,9 +55,6 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(ParameterSettingFailed, AgdbExceptionHandling,
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidArgumentNumbers, AgdbExceptionHandling,
                                "Invalid arguments numbers");
 
-DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidArguments, AgdbExceptionHandling,
-                               "Invalid arguments");
-
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidInstanceID, AgdbExceptionHandling,
                                "Invalid instance id.");
 

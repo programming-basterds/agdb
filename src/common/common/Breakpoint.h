@@ -69,15 +69,11 @@ struct IBreakpointProxy
     virtual ~IBreakpointProxy() = default;
 };
 
-using FilePath = std::string;
-using LineNumber = std::size_t;
-using BreakpointCondition = std::string;
-
 struct BreakpointLocation
 {
-    FilePath            file;
-    LineNumber          line;
-    BreakpointCondition condition;
+    std::string file;
+    std::size_t line;
+    std::string condition;
 };
 
 class Breakpoint : public IUserBreakpoint, public IInternalBreakpoint

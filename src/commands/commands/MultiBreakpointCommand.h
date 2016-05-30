@@ -8,7 +8,7 @@
  * @author      Leonardo Boquillón
  * @author      Francisco Herrero
  * @date        2016-05-04
- * @brief       Contains Multibreakpoint manipulation commands.
+ * @brief
  *
  * This file is part of agdb
  *
@@ -30,37 +30,33 @@
 #define _MULTI_BREAKPOINT_COMMAND_INCLUDE_H_
 
 #include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
 #include "commands/argumentedCommand.h"
 
 namespace NSCommands
 {
 
-/**
- * @brief MultiBreakpoint creation command.
- * @details Is responsible of the building of
- *          a multibreakpoint in context.
- */
-class MultiBreakpointCommand : public ICommand
+class MultiBreakpointCommand : public ArgumentedCommand
 {
-    /**
-     * @brief Parse mbr command.
-     * @details Supported syntax:
-     *              mbr: NID1 location1:number1 when NID2 location2:number2 [if condition]
-     *
-     * @param[in]     expression Expression to parse.
-     * @param[in/out] ctx Current context.
-     */
-    void execute(const Expression& expression, NSDebuggingContext::Context& ctx) override;
+    enum ArgsIndex
+    {
+        Instance1,
+        Location1,
+        Line1,
+        WhenWord,
+        Instance2,
+        Location2,
+        Line2,
+        IfWord,
+        Condition,
+        // leave this at the end
+        NumberOfArgs
+    };
+
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-/**
- * @brief Enable MultiBreakpoint command.
- */
 class EnableMultibreakpointCommand : public ArgumentedCommand
 {
-
-    /** @brief Index of arguments */
     enum ArgsIndex
     {
         MbrInstance,
@@ -68,17 +64,11 @@ class EnableMultibreakpointCommand : public ArgumentedCommand
         NumberOfArgs
     };
 
-    /** ArgumentedCommand interface implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-/**
- * @brief Disable MultiBreakpoint command.
- */
 class DisableMultibreakpointCommand : public ArgumentedCommand
 {
-
-    /** @brief Index of arguments */
     enum ArgsIndex
     {
         MbrInstance,
@@ -86,17 +76,11 @@ class DisableMultibreakpointCommand : public ArgumentedCommand
         NumberOfArgs
     };
 
-    /** ArgumentedCommand interface implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
-/**
- * @brief Ignore MultiBreakpoint command.
- */
 class IgnoreMultibreakpointCommand : public ArgumentedCommand
 {
-
-    /** @brief Index of arguments */
     enum ArgsIndex
     {
         MbrInstance,
@@ -105,8 +89,7 @@ class IgnoreMultibreakpointCommand : public ArgumentedCommand
         NumberOfArgs
     };
 
-    /** ArgumentedCommand interface implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/) override;
 };
 
 } // namespace NSCommands
