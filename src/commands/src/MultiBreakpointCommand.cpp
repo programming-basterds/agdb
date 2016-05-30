@@ -34,7 +34,7 @@ namespace NSCommands
 using NSDebuggingContext::BreakpointId;
 using NSDebuggingContext::MultiBreakpointId;
 
-/*Poor man version: mbr NID1 location1 number1 when NID2 location2 number2 if cond */
+/*mbr NID1 location1:number1 when NID2 location2:number2 [if {condition}] */
 
 void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
