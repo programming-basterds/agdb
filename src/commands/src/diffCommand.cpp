@@ -40,8 +40,8 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     auto framesAreEquals = false;
     do
     {
-        const auto future1 = instance1.next();
-        const auto future2 = instance2.next();
+        const auto future1 = steppingMethod(instance1);
+        const auto future2 = steppingMethod(instance2);
         future1.wait();
         future2.wait();
         if (instance1.isAlive() and instance2.isAlive())
@@ -62,6 +62,26 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     {
         std::cout << "Some program has stopped" << std::endl;
     }
+}
+
+std::future<bool> NextDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+{
+    return instance.next();
+}
+
+std::future<bool> NextInstructionDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+{
+    return instance.nextInstruction();
+}
+
+std::future<bool> StepDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+{
+    return instance.step();
+}
+
+std::future<bool> StepInstructionDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+{
+    return instance.stepInstruction();
 }
 
 } // namespace NSCommands
