@@ -38,7 +38,8 @@ void StepCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
 
     const auto instanceNmbr = (args.size() == 0u) ? ctx.getCurrentInstance() : mili::from_string<NSCommon::InstanceId>(args[InstanceNumber]);
     auto& instance = ctx.getInstance(instanceNmbr);
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(instance.step());
+    auto stepTermination = instance.next();
+    stepTermination.wait();
 }
 
 } // namespace NSCommands

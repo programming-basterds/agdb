@@ -43,7 +43,7 @@ public:
     using NextAspect::NextAspect;
     std::future<bool> next();
 
-    bool step();
+    std::future<bool> step();
 
 protected:
     void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
@@ -64,11 +64,13 @@ std::future<bool> GdbSteppingAspect<NextAspect>::next()
 }
 
 template<class NextAspect>
-bool GdbSteppingAspect<NextAspect>::step()
+std::future<bool> GdbSteppingAspect<NextAspect>::step()
 {
-    const bool ret = (bool) gmi_exec_step(this->handler) != 0;
+    const bool stepSuccess = (bool) gmi_exec_step(this->handler) != 0;
     this->threadLoop.resume();
-    return ret;
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(stepSuccess);
+    _prm.reset(new std::promise<bool>());
+    return _prm->get_future();
 }
 
 template<class NextAspect>
