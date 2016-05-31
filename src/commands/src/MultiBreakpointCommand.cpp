@@ -34,20 +34,35 @@ namespace NSCommands
 using NSDebuggingContext::BreakpointId;
 using NSDebuggingContext::MultiBreakpointId;
 
-/*Poor man version: mbr NID1 location1 number1 when NID2 location2 number2 if cond */
+const char MultiBreakpointCommand::IF_WORD[] = "if";
+const char MultiBreakpointCommand::WHEN_WORD[] = "when";
 
+/*mbr NID1 location1:number1 when NID2 location2:number2 [if condition] */
 void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == NumberOfArgs);
-
-    auto mbc = new NSDebuggingContext::MultiBreakpoint();
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() > Location2);
+    if (args[WhenWord] != WHEN_WORD)
+    {
+        throw NSCommon::ArgumentMissing(WHEN_WORD);
+    }
 
     auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1]));
-    const BreakpointLocation location1({args[Location1], mili::from_string<size_t>(args[Line1]), std::string{}});
-    mbc->addInconditionalBreakpoint(instance1, location1);
-
+    const auto location1 = BreakpointLocation::fromArgument(args[Location1]);
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2]));
-    const BreakpointLocation location2({args[Location2], mili::from_string<size_t>(args[Line2]), args[Condition]});
+    auto location2 = BreakpointLocation::fromArgument(args[Location2]);
+
+    if (args.size() == NumberOfArgs)
+    {
+        if (args[IfWord] != IF_WORD)
+        {
+            throw NSCommon::ArgumentMissing(IF_WORD);
+        }
+        location2.condition = args[Condition];
+    }
+    // else there is no condition on second breakpoint.
+
+    auto mbc = new NSDebuggingContext::MultiBreakpoint();
+    mbc->addInconditionalBreakpoint(instance1, location1);
     mbc->addConditionalBreakpoint(instance2, location2);
 
     auto mbrId = ctx.addMultiBreakpoint(mbc);

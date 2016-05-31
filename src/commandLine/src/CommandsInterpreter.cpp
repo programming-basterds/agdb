@@ -4,7 +4,9 @@
  *                  Taller Technologies.
  *
  * @file        CommandsInterpreter.cpp
- * @author      Daniel Gutson, Emanuel Bringas
+ * @author      Daniel Gutson
+ * @author      Emanuel Bringas
+ * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *
@@ -40,14 +42,17 @@ void HelpCommand::execute(NSDebuggingContext::Context& /*ctx*/)
 #include "commandLine/CommandList.h"
 }
 
-Arguments Interpreter::getArguments(const std::string& str)
+const std::regex Interpreter::ARG_RE("^[ ]*(([^ \\{\\}]+)|\\{([^\\}]+)\\})");
+
+Arguments Interpreter::processArguments(std::string&& str)
 {
     Arguments ret;
-    Argument arg;
-    std::stringstream ss(str);
-    while (ss >> arg)
+    std::smatch sm;
+    while (std::regex_search(str, sm, ARG_RE))
     {
-        ret.emplace_back(std::move(arg));
+        Argument arg = sm[SimpleArgIndex].length() ? sm[SimpleArgIndex].str() : sm[BracedArgIndex].str();
+        ret.push_back(std::move(arg));
+        str = sm.suffix().str();
     }
     return ret;
 }
@@ -61,7 +66,7 @@ void Interpreter::execute(const std::string& line)
         const auto cmd = _commands.find(cmdName);
         if (cmd != _commands.end())
         {
-            cmd->second->execute(getArguments(line.substr(separator + 1)), _ctx);
+            cmd->second->execute(processArguments(line.substr(separator + 1)), _ctx);
         }
         else
         {

@@ -25,6 +25,7 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "common/exceptions.h"
 #include "common/Breakpoint.h"
 
 Breakpoint::Breakpoint(Callback callback, mi_bkpt* breakpointImple,
@@ -62,4 +63,17 @@ void Breakpoint::disable()
 void Breakpoint::ignore(const int count)
 {
     _internals->ignoreBreakpoint(this, count);
+}
+
+const std::regex BreakpointLocation::LOCATION_RE("^([-a-zA-Z0-9_/.]+):([1-9]+\\d*)$");
+
+BreakpointLocation BreakpointLocation::fromArgument(const std::string& text)
+{
+    std::smatch sm;
+    const auto matched = std::regex_match(text, sm, LOCATION_RE);
+    if (!matched)
+    {
+        throw NSCommon::InvalidArgument(text);
+    }
+    return {sm[PathReIndex], mili::from_string<size_t>(sm[LineNumReIndex]), std::string{}};
 }

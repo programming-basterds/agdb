@@ -4,7 +4,10 @@
  *                  Taller Technologies.
  *
  * @file        CommandsInterpreter.h
- * @author      Daniel Gutson, Emanuel Bringas, Leonardo Boquillon
+ * @author      Daniel Gutson
+ * @author      Emanuel Bringas
+ * @author      Leonardo Boquillon
+ * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *
@@ -32,6 +35,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <regex>
 #include "debuggingContext/Context.h"
 #include "commands/ICommand.h"
 #include "commands/RaiseLocalCommand.h"
@@ -56,27 +60,68 @@ namespace NSCommandLine
 
 using namespace NSCommands; // TODO: Avoid this
 
+/**
+ * @brief Help Command
+ * @details Shows all supported commands with a brief description.
+ */
 class HelpCommand : public NSCommands::NoArgsCommand
 {
+    /** NoArgsCommand implementation. */
     void execute(NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Commands Interpreter
+ * @details Proccess and executes command line from user.
+ */
 class Interpreter
 {
 public:
+
+    /**
+     * @brief Constructor
+     * @param[in/out] ctx Context to use in executions.
+     */
     inline Interpreter(NSDebuggingContext::Context& ctx);
 
+    /**
+     * @brief Executes command line.
+     * @param[in] line Command line input.
+     */
     void execute(const std::string& line);
 
 private:
+
 #define SEPARATOR   ;
 #define COMMANDS_TABLE(cmd, name, desc)   cmd cmd##_instance
 #include "commandLine/CommandList.h"
 
-    const std::unordered_map<std::string, ICommand*> _commands;
-    NSDebuggingContext::Context& _ctx;
+    /**
+     * @brief Tokenize arguments list.
+     * @details Each argument is separated with spaces, unless
+     *          is escaped with braces. In that case it can support
+     *          spaces.
+     *
+     * @param[in/out] str Command line to process.
+     * @return            Processed arguments.
+     */
+    static Arguments processArguments(std::string&& str);
 
-    static Arguments getArguments(const std::string& str);
+    /** Regular expression to parse an argument. */
+    static const std::regex ARG_RE;
+
+    /** Indexes for regular expression groups used. */
+    enum ArgGroupsIndex
+    {
+        SimpleArgIndex = 2u,
+        BracedArgIndex
+    };
+
+    /** Commands container */
+    const std::unordered_map<std::string, ICommand*> _commands;
+
+    /** Context used for commands */
+    NSDebuggingContext::Context&                     _ctx;
 };
 
 } // namespace NSCommandLine

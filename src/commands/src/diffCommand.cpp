@@ -48,7 +48,8 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
         {
             framesAreEquals = (instance1.frame() == instance2.frame());
         }
-    } while (instance1.isAlive() and instance2.isAlive() and framesAreEquals);
+    }
+    while (instance1.isAlive() and instance2.isAlive() and framesAreEquals);
 
 
     if (not framesAreEquals)
