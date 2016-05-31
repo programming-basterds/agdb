@@ -30,6 +30,7 @@
 #include <cassert>
 #include <string>
 #include <sstream>
+#include <memory>
 #include "mi_gdb.h"
 #include "common/exceptions.h"
 #include "common/listUtils.h"
@@ -47,12 +48,14 @@ class GdbStackFrameAspect : public NextAspect
     using FunctionName = std::string;
     using StackFrames  = NSCommon::ConstIterableType<mi_frames>;
     using Arguments    = NSCommon::ConstIterableType<mi_results>;
-
+    using FramePtr     = std::unique_ptr<mi_frames>;
 public:
+    using FramePoint   = std::string;
     using NextAspect::NextAspect;
 
     inline void backtrace(NSCommon::EvaluationMessage& message);
 
+    inline FramePoint frame();
 protected:
 
     inline void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
@@ -104,6 +107,17 @@ inline void GdbStackFrameAspect<NextAspect>::backtrace(NSCommon::EvaluationMessa
     {
         message = "No stack info";
     }
+}
+
+template<class NextAspect>
+inline typename GdbStackFrameAspect<NextAspect>::FramePoint GdbStackFrameAspect<NextAspect>::frame()
+{
+    const FramePtr frameInfo(gmi_stack_info_frame(this->handler));
+    mili::assert_throw<NSCommon::NoFrameInfo>(frameInfo.get() != nullptr);
+
+    std::stringstream ss;
+    ss << frameInfo->file << ":" << frameInfo->line;
+    return ss.str();
 }
 
 template<class NextAspect>
