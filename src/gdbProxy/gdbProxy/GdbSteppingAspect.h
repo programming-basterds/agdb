@@ -41,9 +41,11 @@ class GdbSteppingAspect : public NextAspect
 {
 public:
     using NextAspect::NextAspect;
-    std::future<bool> next();
 
+    std::future<bool> next();
+    std::future<bool> nextInstruction();
     std::future<bool> step();
+    std::future<bool> stepInstruction();
 
 protected:
     void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
@@ -56,9 +58,19 @@ private:
 template<class NextAspect>
 std::future<bool> GdbSteppingAspect<NextAspect>::next()
 {
-    const bool nextSuccess = (bool) gmi_exec_next(this->handler) != 0;
+    const bool success = (bool) gmi_exec_next(this->handler) != 0;
     this->threadLoop.resume();
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(nextSuccess);
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
+    _prm.reset(new std::promise<bool>());
+    return _prm->get_future();
+}
+
+template<class NextAspect>
+std::future<bool> GdbSteppingAspect<NextAspect>::nextInstruction()
+{
+    const bool success = (bool) gmi_exec_next_instruction(this->handler) != 0;
+    this->threadLoop.resume();
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
     _prm.reset(new std::promise<bool>());
     return _prm->get_future();
 }
@@ -66,9 +78,19 @@ std::future<bool> GdbSteppingAspect<NextAspect>::next()
 template<class NextAspect>
 std::future<bool> GdbSteppingAspect<NextAspect>::step()
 {
-    const bool stepSuccess = (bool) gmi_exec_step(this->handler) != 0;
+    const bool success = (bool) gmi_exec_step(this->handler) != 0;
     this->threadLoop.resume();
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(stepSuccess);
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
+    _prm.reset(new std::promise<bool>());
+    return _prm->get_future();
+}
+
+template<class NextAspect>
+std::future<bool> GdbSteppingAspect<NextAspect>::stepInstruction()
+{
+    const bool success = (bool) gmi_exec_step_instruction(this->handler) != 0;
+    this->threadLoop.resume();
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
     _prm.reset(new std::promise<bool>());
     return _prm->get_future();
 }
