@@ -7,7 +7,7 @@
  * @author      Emanuel Bringas
  * @author      Francisco Herrero
  * @date        2016-05-04
- * @brief
+ * @brief       Breakpoint commands declaration.
  *
  * This file is part of agdb
  *
@@ -34,23 +34,39 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Breakpoint command.
+ * @details Registers new breakpoint on current instance.
+ */
 class BreakpointCommand : public ICommand
 {
+private:
+
+    /** @brief Index of arguments */
     enum ArgsIndex
     {
         Location,
-        Line,
         IfWord,
         Condition,
         // leave this at the end
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    /** ICommand interface implementation */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+
+    static const char IF_WORD[];
 };
 
+/**
+ * @brief Enable breakpoint command.
+ * @details Enables a breakpoint in current instance.
+ */
 class EnableBreakpointCommand : public ICommand
 {
+private:
+
+    /** @brief Index of arguments */
     enum ArgsIndex
     {
         BrNumber,
@@ -58,11 +74,19 @@ class EnableBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    /** ICommand interface implementation */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Disable breakpoint command.
+ * @details Disables a breakpoint in current instance.
+ */
 class DisableBreakpointCommand : public ICommand
 {
+private:
+
+    /** @brief Index of arguments */
     enum ArgsIndex
     {
         BrNumber,
@@ -70,11 +94,19 @@ class DisableBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    /** ICommand interface implementation */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Ignore breakpoint command.
+ * @details Ignores a breakpoint for determined times in current instance.
+ */
 class IgnoreBreakpointCommand : public ICommand
 {
+private:
+
+    /** @brief Index of arguments */
     enum ArgsIndex
     {
         BrNumber,
@@ -83,6 +115,7 @@ class IgnoreBreakpointCommand : public ICommand
         NumberOfArgs
     };
 
+    /** ICommand interface implementation */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
 };
 

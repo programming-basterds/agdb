@@ -5,8 +5,9 @@
  *
  * @file        breakpointCommand.cpp
  * @author      Emanuel Bringas
+ * @author      Francisco Herrero
  * @date        2016-05-04
- * @brief
+ * @brief       Breakpoint commands definition.
  *
  * This file is part of agdb
  *
@@ -34,13 +35,25 @@ namespace NSCommands
 
 using NSDebuggingContext::BreakpointId;
 
+const char BreakpointCommand::IF_WORD[] = "if";
+
 void BreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 2u || args.size() == NumberOfArgs);
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 1u || args.size() == NumberOfArgs);
 
     const auto instanceId = ctx.getCurrentInstance();
     auto& instance = ctx.getInstance(instanceId);
-    const BreakpointLocation location({args[Location], mili::from_string<size_t>(args[Line]), std::string{}});
+    auto location = BreakpointLocation::fromArgument(args[Location]);
+    if (args.size() == NumberOfArgs)
+    {
+        if (args[IfWord] != IF_WORD)
+        {
+            throw NSCommon::ArgumentMissing(IF_WORD);
+        }
+        location.condition = args[Condition];
+    }
+    // else there is no condition on breakpoint.
+
     auto breakpoint = instance.addBreakpoint(location, [instanceId](IUserBreakpoint* /*breakpoint*/, moirai::PostIterationAction & nextAction)
     {
         std::cout << "Breakpoint in instance " << instanceId << std::endl;

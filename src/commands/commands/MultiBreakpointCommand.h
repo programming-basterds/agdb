@@ -68,26 +68,9 @@ private:
      */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 
-    /**
-     * @brief Parses location.
-     * @details Expected notation:
-     *              <source file>:<line number>
-     * @param[in] text Location to parse.
-     * @return BreakpointLocation generated.
-     */
-    static BreakpointLocation parseLocation(const std::string& text);
-
-    /** Location regular expression. */
-    static const std::regex LOCATION_RE;
     static const char       IF_WORD[];
     static const char       WHEN_WORD[];
 
-    /** Location regular expression group indexes. */
-    enum LocationReIndex
-    {
-        PathReIndex = 1u,
-        LineNumReIndex
-    };
 };
 
 /**
@@ -109,6 +92,9 @@ private:
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Disable MultiBreakpoint command.
+ */
 class DisableMultibreakpointCommand : public ICommand
 {
 private:
@@ -125,6 +111,9 @@ private:
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Ignore MultiBreakpoint command.
+ */
 class IgnoreMultibreakpointCommand : public ICommand
 {
 private:
