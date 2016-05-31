@@ -35,12 +35,17 @@ using NSDebuggingContext::BreakpointId;
 using NSDebuggingContext::MultiBreakpointId;
 
 const std::regex MultiBreakpointCommand::LOCATION_RE("^([-a-zA-Z0-9_/.]+):([1-9]+\\d*)$");
+const char MultiBreakpointCommand::IF_WORD[] = "if";
+const char MultiBreakpointCommand::WHEN_WORD[] = "when";
 
 BreakpointLocation MultiBreakpointCommand::parseLocation(const std::string& text)
 {
     std::smatch sm;
     const auto matched = std::regex_match(text, sm, LOCATION_RE);
-    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(matched); // TODO: add different exception.
+    if (!matched)
+    {
+        throw NSCommon::InvalidArgument(text);
+    }
     return {sm[PathReIndex], mili::from_string<size_t>(sm[LineNumReIndex]), std::string{}};
 }
 
@@ -48,16 +53,22 @@ BreakpointLocation MultiBreakpointCommand::parseLocation(const std::string& text
 void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() > Location2);
-
+    if (args[WhenWord] != WHEN_WORD)
+    {
+        throw NSCommon::ArgumentMissing(WHEN_WORD);
+    }
 
     auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1]));
     const BreakpointLocation location1 = parseLocation(args[Location1]);
-
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2]));
     BreakpointLocation location2 = parseLocation(args[Location2]);
+
     if (args.size() == NumberOfArgs)
     {
-        mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args[IfWord] == "if"); //TODO: different exception.
+        if (args[IfWord] != IF_WORD)
+        {
+            throw NSCommon::ArgumentMissing(IF_WORD);
+        }
         location2.condition = args[Condition];
     }
     // else there is no condition on second breakpoint.
