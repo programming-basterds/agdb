@@ -37,22 +37,33 @@ namespace NSCommands
 
 class MultiBreakpointCommand : public ICommand
 {
+private:
     enum ArgsIndex
     {
         Instance1,
         Location1,
-        Line1,
         WhenWord,
         Instance2,
         Location2,
-        Line2,
         IfWord,
         Condition,
         // leave this at the end
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    enum LocationReIndex
+    {
+        PathReIndex = 1u,
+        LineNumReIndex
+    };
+
+    /** ICommand interface implementation */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+
+    static BreakpointLocation parseLocation(const std::string& text);
+
+    static const std::regex LOCATION_RE;
+
 };
 
 class EnableMultibreakpointCommand : public ICommand
@@ -64,7 +75,7 @@ class EnableMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 class DisableMultibreakpointCommand : public ICommand
@@ -76,7 +87,7 @@ class DisableMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 class IgnoreMultibreakpointCommand : public ICommand
@@ -89,7 +100,7 @@ class IgnoreMultibreakpointCommand : public ICommand
         NumberOfArgs
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& /*ctx*/);
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

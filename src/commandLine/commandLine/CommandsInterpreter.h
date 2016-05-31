@@ -4,7 +4,10 @@
  *                  Taller Technologies.
  *
  * @file        CommandsInterpreter.h
- * @author      Daniel Gutson, Emanuel Bringas, Leonardo Boquillon
+ * @author      Daniel Gutson
+ * @author      Emanuel Bringas
+ * @author      Leonardo Boquillon
+ * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *
@@ -32,6 +35,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <regex>
 #include "debuggingContext/Context.h"
 #include "commands/ICommand.h"
 #include "commands/RaiseLocalCommand.h"
@@ -77,6 +81,14 @@ private:
     NSDebuggingContext::Context& _ctx;
 
     static Arguments processArguments(std::string&& str);
+
+    static const std::regex ARG_RE;
+
+    enum ArgGroupsIndex
+    {
+        SimpleArgIndex = 2u,
+        BracedArgIndex
+    };
 };
 
 } // namespace NSCommandLine

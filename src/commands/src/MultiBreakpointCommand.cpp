@@ -34,20 +34,36 @@ namespace NSCommands
 using NSDebuggingContext::BreakpointId;
 using NSDebuggingContext::MultiBreakpointId;
 
-/*mbr NID1 location1:number1 when NID2 location2:number2 [if {condition}] */
+const std::regex MultiBreakpointCommand::LOCATION_RE("^([-a-zA-Z0-9_/.]+):([1-9]+\\d*)$");
 
+BreakpointLocation MultiBreakpointCommand::parseLocation(const std::string& text)
+{
+    std::smatch sm;
+    const auto matched = std::regex_match(text, sm, LOCATION_RE);
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(matched); // TODO: add different exception.
+    return {sm[PathReIndex], mili::from_string<size_t>(sm[LineNumReIndex]), std::string{}};
+}
+
+/*mbr NID1 location1:number1 when NID2 location2:number2 [if condition] */
 void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == NumberOfArgs);
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() > Location2);
 
-    auto mbc = new NSDebuggingContext::MultiBreakpoint();
 
     auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1]));
-    const BreakpointLocation location1({args[Location1], mili::from_string<size_t>(args[Line1]), std::string{}});
-    mbc->addInconditionalBreakpoint(instance1, location1);
+    const BreakpointLocation location1 = parseLocation(args[Location1]);
 
     auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2]));
-    const BreakpointLocation location2({args[Location2], mili::from_string<size_t>(args[Line2]), args[Condition]});
+    BreakpointLocation location2 = parseLocation(args[Location2]);
+    if (args.size() == NumberOfArgs)
+    {
+        mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args[IfWord] == "if"); //TODO: different exception.
+        location2.condition = args[Condition];
+    }
+    // else there is no condition on second breakpoint.
+
+    auto mbc = new NSDebuggingContext::MultiBreakpoint();
+    mbc->addInconditionalBreakpoint(instance1, location1);
     mbc->addConditionalBreakpoint(instance2, location2);
 
     auto mbrId = ctx.addMultiBreakpoint(mbc);

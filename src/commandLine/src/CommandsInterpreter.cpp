@@ -4,7 +4,9 @@
  *                  Taller Technologies.
  *
  * @file        CommandsInterpreter.cpp
- * @author      Daniel Gutson, Emanuel Bringas
+ * @author      Daniel Gutson
+ * @author      Emanuel Bringas
+ * @author      Francisco Herrero
  * @date        2016-05-04
  * @brief
  *
@@ -24,7 +26,6 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <regex>
 #include <iomanip>
 #include "commandLine/CommandsInterpreter.h"
 
@@ -41,13 +42,15 @@ void HelpCommand::execute(NSDebuggingContext::Context& /*ctx*/)
 #include "commandLine/CommandList.h"
 }
 
+const std::regex Interpreter::ARG_RE("^[ ]*(([^ \\{\\}]+)|\\{([^\\}]+)\\})");
+
 Arguments Interpreter::processArguments(std::string&& str)
 {
     Arguments ret;
     std::smatch sm;
-    while (std::regex_search(str, sm, std::regex("^[ ]*(([^ \\{\\}]+)|\\{([^\\}]+)\\})")))
+    while (std::regex_search(str, sm, ARG_RE))
     {
-        Argument arg = sm[2u].length() ? sm[2u].str() : sm[3u].str();
+        Argument arg = sm[SimpleArgIndex].length() ? sm[SimpleArgIndex].str() : sm[BracedArgIndex].str();
         ret.push_back(std::move(arg));
         str = sm.suffix().str();
     }
