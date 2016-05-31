@@ -52,6 +52,7 @@
 #include "commands/multiInterruptCommand.h"
 #include "commands/nextCommand.h"
 #include "commands/stepCommand.h"
+#include "commands/diffCommand.h"
 #include "commands/baseCommands.h"
 
 namespace NSCommandLine

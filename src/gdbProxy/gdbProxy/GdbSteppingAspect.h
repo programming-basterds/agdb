@@ -28,6 +28,8 @@
 #define GDB_STEPPING_ASPECT_H
 
 #include <string>
+#include <thread>
+#include <future>
 #include "mi_gdb.h"
 #include "gdbProxy/GdbBaseAspect.h"
 
@@ -39,22 +41,26 @@ class GdbSteppingAspect : public NextAspect
 {
 public:
     using NextAspect::NextAspect;
-
-    bool next();
+    std::future<bool> next();
 
     bool step();
 
 protected:
     void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
+
+private:
+    std::unique_ptr<std::promise<bool>> _prm;
 };
 
 
 template<class NextAspect>
-bool GdbSteppingAspect<NextAspect>::next()
+std::future<bool> GdbSteppingAspect<NextAspect>::next()
 {
-    const bool ret = (bool) gmi_exec_next(this->handler) != 0;
+    const bool nextSuccess = (bool) gmi_exec_next(this->handler) != 0;
     this->threadLoop.resume();
-    return ret;
+    mili::assert_throw<NSCommon::SteppingExecutionFailed>(nextSuccess);
+    _prm.reset(new std::promise<bool>());
+    return _prm->get_future();
 }
 
 template<class NextAspect>
@@ -69,9 +75,14 @@ template<class NextAspect>
 inline void GdbSteppingAspect<NextAspect>::processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason,
         moirai::PostIterationAction& nextAction)
 {
-    if (stopReason.reason == sr_end_stepping_range)
+    const auto stopByStepReason = (stopReason.reason == sr_end_stepping_range);
+    if (stopByStepReason)
     {
         nextAction = moirai::SuspendLooping;
+    }
+    if (_prm != nullptr)
+    {
+        _prm->set_value(stopByStepReason);
     }
     NextAspect::processStopReason(response, stopReason, nextAction);
 }

@@ -3,9 +3,9 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        nextCommand.cpp
+ * @file        diffCommand.h
  * @author      Emanuel Bringas
- * @date        2016-05-04
+ * @date        2016-05-09
  * @brief
  *
  * This file is part of agdb
@@ -24,22 +24,28 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mili/mili.h"
-#include "common/exceptions.h"
-#include "gdbProxy/GdbProxy.h"
-#include "commands/nextCommand.h"
+#ifndef _DIFF_COMMAND_INCLUDE_H_
+#define _DIFF_COMMAND_INCLUDE_H_
+
+#include "debuggingContext/Context.h"
+#include "commands/ICommand.h"
 
 namespace NSCommands
 {
 
-void NextCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
+class DiffCommand : public ICommand
 {
-    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(0u == args.size() || args.size() == unsigned(NumberOfArgs));
+private:
+    enum ArgsIndex
+    {
+        InstanceNumber1,
+        InstanceNumber2,
+        NumberOfArgs
+    };
 
-    const auto instanceNmbr = (args.size() == 0u) ? ctx.getCurrentInstance() : mili::from_string<NSCommon::InstanceId>(args[InstanceNumber]);
-    auto& instance = ctx.getInstance(instanceNmbr);
-    auto nextTermination = instance.next();
-    nextTermination.wait();
-}
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+};
 
 } // namespace NSCommands
+
+#endif /* _DIFF_COMMAND_INCLUDE_H_ */

@@ -72,6 +72,8 @@ public:
 
     bool isRunning() const;
 
+    bool isAlive() const;
+
 protected:
 
     virtual void processStopReason(mi_output* const response,
@@ -244,6 +246,12 @@ template<class Type>
 inline bool GdbBaseAspect<Type>::isRunning() const
 {
     return running;
+}
+
+template<class Type>
+inline bool GdbBaseAspect<Type>::isAlive() const
+{
+    return alive;
 }
 
 } // namespace NSGdbProxy

@@ -108,6 +108,14 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(ErrorRequestingThreadInfo, AgdbExceptionHandling,
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SteppingExecutionFailed, AgdbExceptionHandling,
                                "Can not execute stepping command.");
 
+// Diff command
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InstancesAreNotStopped, AgdbExceptionHandling,
+                               "All instances should be stopped");
+
+// Backtrace aspect
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NoFrameInfo, AgdbExceptionHandling,
+                               "No frame info available");
+
 } // End of namespace NSCommon
 
 #endif // EXCEPTIONS_H
