@@ -28,33 +28,33 @@
 #   define LAST_SEPARATOR SEPARATOR
 #endif
 
-COMMANDS_TABLE(BacktraceCommand,                "backtrace",  "Print backtrace of all stack frames"                                   ) SEPARATOR
-COMMANDS_TABLE(BreakpointCommand,               "br",         "Add a break point"                                                     ) SEPARATOR
-COMMANDS_TABLE(ContinueCommand,                 "continue",   "Continue current instance"                                             ) SEPARATOR
-COMMANDS_TABLE(DisableBreakpointCommand,        "disable",    "Disable breakpoint"                                                    ) SEPARATOR
-COMMANDS_TABLE(DisableMultibreakpointCommand,   "dismbr",     "disable Multibreakpoint"                                               ) SEPARATOR
-COMMANDS_TABLE(EnableBreakpointCommand,         "enable",     "Enable breakpoint"                                                     ) SEPARATOR
-COMMANDS_TABLE(EnableMultibreakpointCommand,    "enambr",     "enable Multibreakpoint"                                                ) SEPARATOR
-COMMANDS_TABLE(FwdCommand,                      "fwd",        "Forward given string to gdb interpreter"                               ) SEPARATOR
-COMMANDS_TABLE(HelpCommand,                     "help",       "Show this help"                                                        ) SEPARATOR
-COMMANDS_TABLE(IgnoreBreakpointCommand,         "ignore",     "Ignore breakpoint"                                                     ) SEPARATOR
-COMMANDS_TABLE(IgnoreMultibreakpointCommand,    "ignmbr",     "ignore Multibreakpoint"                                                ) SEPARATOR
-COMMANDS_TABLE(InstanceCommand,                 "instance",   "Instance manager"                                                      ) SEPARATOR
-COMMANDS_TABLE(ListCommand,                     "list",       "List specified source code lines"                                      ) SEPARATOR
-COMMANDS_TABLE(MultiBreakpointCommand,          "mbr",        "Multibreakpoint command"                                               ) SEPARATOR
-COMMANDS_TABLE(MultiContinueCommand,            "mcontinue",  "Continue multiple instances"                                           ) SEPARATOR
-COMMANDS_TABLE(MultiInterruptCommand,           "minterrupt", "Interrupts the given instances, or each one of them."                  ) SEPARATOR
-COMMANDS_TABLE(NextCommand,                     "next",       "Step program"                                                          ) SEPARATOR
-COMMANDS_TABLE(PrintCommand,                    "print",      "Print value of expression"                                             ) SEPARATOR
-COMMANDS_TABLE(QuitCommand,                     "quit",       "Terminate agdb"                                                        ) SEPARATOR
-COMMANDS_TABLE(RaiseLocalCommand,               "raise",      "raise command"                                                         ) SEPARATOR
-COMMANDS_TABLE(RaiseRemoteCommand,              "rraise",     "raise a remote program"                                                ) SEPARATOR
-COMMANDS_TABLE(StepCommand,                     "step",       "Next line of code. Get inside functions"                               ) SEPARATOR
-COMMANDS_TABLE(NextDiffCommand,                 "mdiff",      "Continue the execution by next of given instances until its differs"   ) SEPARATOR
-COMMANDS_TABLE(NextInstructionDiffCommand,      "mdiffni",     "Continue the execution by nexti of given instances until its differs." ) SEPARATOR
-COMMANDS_TABLE(StepDiffCommand,                 "mdiffs",      "Continue the execution by step of given instances until its differs."  ) SEPARATOR
-COMMANDS_TABLE(StepInstructionDiffCommand,      "mdiffsi",     "Continue the execution by stepi of given instances until its differs." ) SEPARATOR
-COMMANDS_TABLE(ShowVersion,                     "version",    "Show version of agdb"                                                  ) LAST_SEPARATOR
+COMMANDS_TABLE(BacktraceCommand,                "backtrace",  "Print backtrace of all stack frames"                                 ) SEPARATOR
+COMMANDS_TABLE(BreakpointCommand,               "br",         "Add a break point"                                                   ) SEPARATOR
+COMMANDS_TABLE(ContinueCommand,                 "continue",   "Continue current instance"                                           ) SEPARATOR
+COMMANDS_TABLE(DisableBreakpointCommand,        "disable",    "Disable breakpoint"                                                  ) SEPARATOR
+COMMANDS_TABLE(DisableMultibreakpointCommand,   "dismbr",     "disable Multibreakpoint"                                             ) SEPARATOR
+COMMANDS_TABLE(EnableBreakpointCommand,         "enable",     "Enable breakpoint"                                                   ) SEPARATOR
+COMMANDS_TABLE(EnableMultibreakpointCommand,    "enambr",     "enable Multibreakpoint"                                              ) SEPARATOR
+COMMANDS_TABLE(FwdCommand,                      "fwd",        "Forward given string to gdb interpreter"                             ) SEPARATOR
+COMMANDS_TABLE(HelpCommand,                     "help",       "Show this help"                                                      ) SEPARATOR
+COMMANDS_TABLE(IgnoreBreakpointCommand,         "ignore",     "Ignore breakpoint"                                                   ) SEPARATOR
+COMMANDS_TABLE(IgnoreMultibreakpointCommand,    "ignmbr",     "ignore Multibreakpoint"                                              ) SEPARATOR
+COMMANDS_TABLE(InstanceCommand,                 "instance",   "Instance manager"                                                    ) SEPARATOR
+COMMANDS_TABLE(ListCommand,                     "list",       "List specified source code lines"                                    ) SEPARATOR
+COMMANDS_TABLE(MultiBreakpointCommand,          "mbr",        "Multibreakpoint command"                                             ) SEPARATOR
+COMMANDS_TABLE(MultiContinueCommand,            "mcontinue",  "Continue multiple instances"                                         ) SEPARATOR
+COMMANDS_TABLE(MultiInterruptCommand,           "minterrupt", "Interrupts the given instances, or each one of them."                ) SEPARATOR
+COMMANDS_TABLE(NextCommand,                     "next",       "Step program"                                                        ) SEPARATOR
+COMMANDS_TABLE(PrintCommand,                    "print",      "Print value of expression"                                           ) SEPARATOR
+COMMANDS_TABLE(QuitCommand,                     "quit",       "Terminate agdb"                                                      ) SEPARATOR
+COMMANDS_TABLE(RaiseLocalCommand,               "raise",      "raise command"                                                       ) SEPARATOR
+COMMANDS_TABLE(RaiseRemoteCommand,              "rraise",     "raise a remote program"                                              ) SEPARATOR
+COMMANDS_TABLE(StepCommand,                     "step",       "Next line of code. Get inside functions"                             ) SEPARATOR
+COMMANDS_TABLE(NextDiffCommand,                 "mdiffn",     "Find execution difference of given instances using next"             ) SEPARATOR
+COMMANDS_TABLE(NextInstructionDiffCommand,      "mdiffni",    "Find execution difference of given instances using next instruction" ) SEPARATOR
+COMMANDS_TABLE(StepDiffCommand,                 "mdiffs",     "Find execution difference of given instances using step"             ) SEPARATOR
+COMMANDS_TABLE(StepInstructionDiffCommand,      "mdiffsi",    "Find execution difference of given instances using next instruction" ) SEPARATOR
+COMMANDS_TABLE(ShowVersion,                     "version",    "Show version of agdb"                                                ) LAST_SEPARATOR
 
 #undef SEPARATOR
 #undef LAST_SEPARATOR

@@ -34,7 +34,6 @@
 namespace NSCommands
 {
 
-    // using SteppingFn = std::future<bool> (*) (NSGdbProxy::GdbProxy&);
 class DiffCommand : public ICommand
 {
 protected:

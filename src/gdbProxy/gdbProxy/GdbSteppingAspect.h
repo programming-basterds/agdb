@@ -42,23 +42,24 @@ class GdbSteppingAspect : public NextAspect
 public:
     using NextAspect::NextAspect;
 
-    std::future<bool> next();
-    std::future<bool> nextInstruction();
-    std::future<bool> step();
-    std::future<bool> stepInstruction();
+    inline std::future<bool> next();
+    inline std::future<bool> nextInstruction();
+    inline std::future<bool> step();
+    inline std::future<bool> stepInstruction();
 
 protected:
+    using SteppingFn = int (*)(mi_h*);
+    std::future<bool> performStepping(SteppingFn fn);
     void processStopReason(mi_output* const response, const NSCommon::StopReason& stopReason, moirai::PostIterationAction& nextAction) override;
 
 private:
     std::unique_ptr<std::promise<bool>> _prm;
 };
 
-
 template<class NextAspect>
-std::future<bool> GdbSteppingAspect<NextAspect>::next()
+std::future<bool> GdbSteppingAspect<NextAspect>::performStepping(SteppingFn fn)
 {
-    const bool success = (bool) gmi_exec_next(this->handler) != 0;
+    const bool success = (bool) fn(this->handler) != 0;
     this->threadLoop.resume();
     mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
     _prm.reset(new std::promise<bool>());
@@ -66,33 +67,27 @@ std::future<bool> GdbSteppingAspect<NextAspect>::next()
 }
 
 template<class NextAspect>
-std::future<bool> GdbSteppingAspect<NextAspect>::nextInstruction()
+inline std::future<bool> GdbSteppingAspect<NextAspect>::next()
 {
-    const bool success = (bool) gmi_exec_next_instruction(this->handler) != 0;
-    this->threadLoop.resume();
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
-    _prm.reset(new std::promise<bool>());
-    return _prm->get_future();
+    return performStepping(gmi_exec_next);
 }
 
 template<class NextAspect>
-std::future<bool> GdbSteppingAspect<NextAspect>::step()
+inline std::future<bool> GdbSteppingAspect<NextAspect>::nextInstruction()
 {
-    const bool success = (bool) gmi_exec_step(this->handler) != 0;
-    this->threadLoop.resume();
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
-    _prm.reset(new std::promise<bool>());
-    return _prm->get_future();
+    return performStepping(gmi_exec_next_instruction);
 }
 
 template<class NextAspect>
-std::future<bool> GdbSteppingAspect<NextAspect>::stepInstruction()
+inline std::future<bool> GdbSteppingAspect<NextAspect>::step()
 {
-    const bool success = (bool) gmi_exec_step_instruction(this->handler) != 0;
-    this->threadLoop.resume();
-    mili::assert_throw<NSCommon::SteppingExecutionFailed>(success);
-    _prm.reset(new std::promise<bool>());
-    return _prm->get_future();
+    return performStepping(gmi_exec_step);
+}
+
+template<class NextAspect>
+inline std::future<bool> GdbSteppingAspect<NextAspect>::stepInstruction()
+{
+    return performStepping(gmi_exec_step_instruction);
 }
 
 template<class NextAspect>
