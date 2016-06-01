@@ -54,6 +54,7 @@ COMMANDS_TABLE(NextDiffCommand,                 "mdiffn",     "Find execution di
 COMMANDS_TABLE(NextInstructionDiffCommand,      "mdiffni",    "Find execution difference of given instances using next instruction" ) SEPARATOR
 COMMANDS_TABLE(StepDiffCommand,                 "mdiffs",     "Find execution difference of given instances using step"             ) SEPARATOR
 COMMANDS_TABLE(StepInstructionDiffCommand,      "mdiffsi",    "Find execution difference of given instances using next instruction" ) SEPARATOR
+COMMANDS_TABLE(SetCommand,                      "set",        "Set variable"                                                        ) SEPARATOR
 COMMANDS_TABLE(ShowVersion,                     "version",    "Show version of agdb"                                                ) LAST_SEPARATOR
 
 #undef SEPARATOR

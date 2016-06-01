@@ -98,6 +98,8 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(GdbBreakpointError , AgdbExceptionHandling,
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMultibreakpoint, AgdbExceptionHandling,
                                "Invalid Breakpoint Id");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(ErrorSet, AgdbExceptionHandling,
+                               "Error Setting Value");
 
 // Raise exceptions
 DEFINE_SPECIFIC_EXCEPTION_TEXT(RaiseLocalBreakpointError , AgdbExceptionHandling,

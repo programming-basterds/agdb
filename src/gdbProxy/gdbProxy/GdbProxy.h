@@ -31,6 +31,7 @@
 #include "gdbProxy/GdbBreakpointAspect.h"
 #include "gdbProxy/GdbDisassembleAspect.h"
 #include "gdbProxy/GdbListAspect.h"
+#include "gdbProxy/gdbEnvironmentAspect.h"
 #include "gdbProxy/GdbPrintAspect.h"
 #include "gdbProxy/GdbRaiseAspect.h"
 #include "gdbProxy/GdbStackFrameAspect.h"
@@ -46,6 +47,7 @@ using GdbProxy = NSCommon::AOPBuilder<GdbDisassembleAspect,
       GdbRaiseAspect,
       GdbBreakpointAspect,
       GdbPrintAspect,
+      GdbEnvironmentAspect,
       GdbStackFrameAspect,
       GdbFwdAspect,
       GdbSteppingAspect,

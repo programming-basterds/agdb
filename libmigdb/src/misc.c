@@ -43,6 +43,12 @@ void mi_gdb_set(mi_h *h, const char *var, const char *val)
  mi_send(h,"-gdb-set %s %s\n",var,val);
 }
 
+/* Added by fran */
+void mi_gdb_set_var(mi_h *h, const char *var, const char *val)
+{
+ mi_send(h,"-gdb-set %s=%s\n",var,val);
+}
+
 void mi_gdb_show(mi_h *h, const char *var)
 {
  if (strcmp(var,"architecture")==0)
@@ -75,7 +81,7 @@ void gmi_gdb_exit(mi_h *h)
 
   Command: -gdb-version
   Return: !=0 OK
-  
+
 ***************************************************************************/
 
 int gmi_gdb_version(mi_h *h)
@@ -91,12 +97,19 @@ int gmi_gdb_version(mi_h *h)
 
   Command: -gdb-set
   Return: !=0 OK
-  
+
 ***************************************************************************/
 
 int gmi_gdb_set(mi_h *h, const char *var, const char *val)
 {
  mi_gdb_set(h,var,val);
+ return mi_res_simple_done(h);
+}
+
+/* added by fran */
+int gmi_gdb_set_var(mi_h *h, const char *var, const char *val)
+{
+ mi_gdb_set_var(h,var,val);
  return mi_res_simple_done(h);
 }
 
@@ -107,7 +120,7 @@ int gmi_gdb_set(mi_h *h, const char *var, const char *val)
 
   Command: -gdb-show
   Return: The current value of the variable or NULL on error.
-  
+
 ***************************************************************************/
 
 char *gmi_gdb_show(mi_h *h, const char *var)
