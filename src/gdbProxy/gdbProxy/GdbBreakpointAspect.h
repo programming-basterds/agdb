@@ -47,7 +47,7 @@ public:
     std::shared_ptr<IUserBreakpoint> addBreakpoint(const BreakpointLocation& loc, Callback callback);
 
 protected:
-
+    /** NextAspect implementation. */
     inline void processStopReason(mi_output* const response,
                                   const NSCommon::StopReason& stopReason,
                                   moirai::PostIterationAction& nextAction) override;
