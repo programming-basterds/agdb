@@ -27,6 +27,7 @@
 #ifndef _DIFF_COMMAND_INCLUDE_H_
 #define _DIFF_COMMAND_INCLUDE_H_
 
+#include <future>
 #include "debuggingContext/Context.h"
 #include "commands/ICommand.h"
 
@@ -35,6 +36,9 @@ namespace NSCommands
 
 class DiffCommand : public ICommand
 {
+protected:
+    virtual std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) = 0;
+
 private:
     enum ArgsIndex
     {
@@ -44,6 +48,26 @@ private:
     };
 
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
+};
+
+class NextDiffCommand : public DiffCommand
+{
+    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+};
+
+class NextInstructionDiffCommand : public DiffCommand
+{
+    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+};
+
+class StepDiffCommand : public DiffCommand
+{
+    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+};
+
+class StepInstructionDiffCommand : public DiffCommand
+{
+    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
 };
 
 } // namespace NSCommands
