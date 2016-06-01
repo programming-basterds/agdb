@@ -5,7 +5,7 @@
 
   Comments:
   Main header for libmigdb.
-  
+
 ***************************************************************************/
 
 #ifndef _MI_GDB_H_
@@ -594,6 +594,8 @@ void gmi_gdb_exit(mi_h *h);
 int gmi_gdb_version(mi_h *h);
 /* Set a gdb variable. */
 int gmi_gdb_set(mi_h *h, const char *var, const char *val);
+/* added by fran: sets a local or internal gdb variable. */
+int gmi_gdb_set_var(mi_h *h, const char *var, const char *val);
 /* Get a gdb variable. */
 char *gmi_gdb_show(mi_h *h, const char *var);
 

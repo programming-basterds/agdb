@@ -40,7 +40,9 @@ public:
 
     using NextAspect::NextAspect;
 
-    inline void setValue(const std::string& var, const std::string& value);
+    inline void setVariable(const std::string& var, const std::string& value);
+
+    inline void setEnvironment(const std::string& var, const std::string& value);
 
 protected:
 
@@ -48,13 +50,27 @@ protected:
     inline void processStopReason(mi_output* const response,
                                   const NSCommon::StopReason& stopReason,
                                   moirai::PostIterationAction& nextAction) override;
+
 };
 
 template<class NextAspect>
-inline void GdbEnvironmentAspect<NextAspect>::setValue(const std::string& var, const std::string& value)
+inline void GdbEnvironmentAspect<NextAspect>::setVariable(const std::string& var, const std::string& value)
+{
+    const auto response = gmi_gdb_set_var(this->handler, var.c_str(), value.c_str());
+    if (response == 0)
+    {
+        throw NSCommon::ErrorSet(mi_error_from_gdb);
+    }
+}
+
+template<class NextAspect>
+inline void GdbEnvironmentAspect<NextAspect>::setEnvironment(const std::string& var, const std::string& value)
 {
     const auto response = gmi_gdb_set(this->handler, var.c_str(), value.c_str());
-    mili::assert_throw<NSCommon::ErrorSet>(response != 0);
+    if (response == 0)
+    {
+        throw NSCommon::ErrorSet(mi_error_from_gdb);
+    }
 }
 
 template<class NextAspect>
