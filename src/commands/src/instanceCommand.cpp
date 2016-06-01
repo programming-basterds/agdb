@@ -37,7 +37,6 @@ void InstanceCommand::execute(const Arguments& args, NSDebuggingContext::Context
     if (args.empty())
     {
         auto id = ctx.getCurrentInstance();
-        auto running = ctx.getInstance(id).isRunning();
 
         if (id == NSDebuggingContext::Context::NoInstance)
         {
@@ -45,7 +44,14 @@ void InstanceCommand::execute(const Arguments& args, NSDebuggingContext::Context
         }
         else
         {
-            std::cout << "Instance number " << id << ", state: " << (running ? "running" : "stopped") <<  std::endl;
+            std::cout << "  Num\tState\tExecutable" << std::endl;
+            for (auto& inst: ctx)
+            {
+                auto running = inst.second->isRunning();
+                std::cout << (id == inst.first ? '*' : ' ')
+                          << " " << inst.first << "\t" << (running ? "running" : "stopped")
+                          << "\t" << inst.second->getProgramName() << std::endl;
+            }
         }
     }
     else

@@ -74,6 +74,8 @@ public:
 
     bool isAlive() const;
 
+    inline const std::string& getProgramName() const;
+
 protected:
 
     virtual void processStopReason(mi_output* const response,
@@ -253,6 +255,13 @@ inline bool GdbBaseAspect<Type>::isAlive() const
 {
     return alive;
 }
+
+template<class Type>
+inline const std::string& GdbBaseAspect<Type>::getProgramName() const
+{
+    return program;
+}
+
 
 } // namespace NSGdbProxy
 
