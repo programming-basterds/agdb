@@ -24,27 +24,32 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <regex>
 #include "commands/setCommand.h"
 
 namespace NSCommands
 {
 
-void parseVar(const std::string& text, std::string& var, std::string& value)
-{
-    std::smatch sm;
-    const auto matched = std::regex_search(text, sm, std::regex("="));
-    if (!matched)
-    {
-        throw NSCommon::InvalidArgument(text);
-    }
-}
-
 void SetCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 1u || args.size() == 2u);
+
     auto instanceId = ctx.getCurrentInstance();
     auto& instance = ctx.getInstance(instanceId);
-    //instance.setValue(const std::string& var, const std::string& value);
+
+    if (args.size() == 1u)
+    {
+        const auto& assignation = args[0u];
+        auto pos = assignation.find('=');
+        if (pos == std::string::npos)
+        {
+            throw NSCommon::InvalidArgument(assignation);
+        }
+        instance.setVariable(assignation.substr(0u, pos), assignation.substr(pos+1u));
+    }
+    else // args.size() == 2u
+    {
+        instance.setEnvironment(args[0u], args[1u]);
+    }
 }
 
 } // namespace NSCommands

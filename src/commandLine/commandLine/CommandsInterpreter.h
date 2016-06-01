@@ -42,6 +42,7 @@
 #include "commands/RaiseRemoteCommand.h"
 #include "commands/printCommand.h"
 #include "commands/listCommand.h"
+#include "commands/setCommand.h"
 #include "commands/backtraceCommand.h"
 #include "commands/instanceCommand.h"
 #include "commands/MultiBreakpointCommand.h"
