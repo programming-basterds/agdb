@@ -33,15 +33,32 @@
 namespace NSGdbProxy
 {
 
+/**
+ * @brief GDB Proxy Environment aspect.
+ * @details Is responsable of the environment
+ *          variables manipulation.
+ *
+ * @tparam NextAspect Next aspect in AOP weave.
+ */
 template<class NextAspect>
 class GdbEnvironmentAspect: public NextAspect
 {
 public:
-
+    /** Use NextAspect constructor */
     using NextAspect::NextAspect;
 
+    /**
+     * @brief Sets a program or gdb variable.
+     * @param[in] var Variable to assign.
+     * @param[in] value Value or expression to assign to variable.
+     */
     inline void setVariable(const std::string& var, const std::string& value);
 
+    /**
+     * @brief Sets a gdb environment variable.
+     * @param[in] var Variable to assign.
+     * @param[in] value Value to assign to variable.
+     */
     inline void setEnvironment(const std::string& var, const std::string& value);
 
 protected:

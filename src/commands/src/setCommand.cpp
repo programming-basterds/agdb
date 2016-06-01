@@ -44,7 +44,7 @@ void SetCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx
         {
             throw NSCommon::InvalidArgument(assignation);
         }
-        instance.setVariable(assignation.substr(0u, pos), assignation.substr(pos+1u));
+        instance.setVariable(assignation.substr(0u, pos), assignation.substr(pos + 1u));
     }
     else // args.size() == 2u
     {
