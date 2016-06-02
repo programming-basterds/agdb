@@ -43,6 +43,12 @@ class GdbRaiseAspect : public NextAspect
 {
 
 public:
+    enum class ConnectionType
+    {
+        Local,
+        Remote
+    };
+
     using NextAspect::NextAspect;
 
     bool connectLocal();
@@ -51,7 +57,7 @@ public:
 
     void run();
 
-    void disconnect();
+    inline void disconnect();
 
     bool loadSymbols();
 
@@ -59,12 +65,23 @@ public:
 
     inline void interrupt();
 
+    inline ConnectionType getConnectionType() const;
+
+    inline const std::string& getLocation() const;
+
+    inline const std::string& getArgs() const;
+
+    inline pid_t getPID() const;
+
 protected:
     inline void processStopReason(mi_output* const response,
                                   const NSCommon::StopReason& reason,
                                   moirai::PostIterationAction& nextAction) override;
 private:
-    pid_t pid;
+    pid_t           pid = -1;
+    std::string     location;
+    ConnectionType  connectionType;
+    std::string     args;
 };
 
 template<class NextAspect>
@@ -75,6 +92,7 @@ bool GdbRaiseAspect<NextAspect>::connectLocal()
     auto connected = this->handler != nullptr;
     if (connected)
     {
+        this->connectionType = ConnectionType::Local;
         // TODO: Check if its needed to interrupt
         //mili::assert_throw<NSCommon::MiAsyncModeError>(gmi_gdb_set(this->handler, "mi-async", "on"));
     }
@@ -86,7 +104,13 @@ bool GdbRaiseAspect<NextAspect>::connectRemote(const std::string& location)
 {
     std::cout << "Connecting with remote gdb at " << location << std::endl;
     gmi_target_select(this->handler, "extended-remote", location.c_str());
-    return this->handler != nullptr;
+    const auto connected = this->handler != nullptr;
+    if (connected)
+    {
+        this->connectionType = ConnectionType::Remote;
+        this->location = location;
+    }
+    return connected;
 }
 
 template<class NextAspect>
@@ -121,7 +145,7 @@ inline void GdbRaiseAspect<NextAspect>::interrupt()
 }
 
 template<class NextAspect>
-void GdbRaiseAspect<NextAspect>::disconnect()
+inline void GdbRaiseAspect<NextAspect>::disconnect()
 {
     gmi_gdb_exit(this->handler);
     mi_disconnect(this->handler);
@@ -131,7 +155,12 @@ template<class NextAspect>
 bool GdbRaiseAspect<NextAspect>::setProgramArguments(const std::string& args)
 {
     std::cout << "Program: " << this->program << "\nArguments: " << args << std::endl;
-    return gmi_set_exec(this->handler, this->program.c_str(), args.c_str()) != 0;
+    const auto success = gmi_set_exec(this->handler, this->program.c_str(), args.c_str()) != 0;
+    if (success)
+    {
+        this->args = args;
+    }
+    return success;
 }
 
 template<class NextAspect>
@@ -151,6 +180,31 @@ inline void GdbRaiseAspect<NextAspect>::processStopReason(mi_output* const respo
     }
 
     NextAspect::processStopReason(response, stopReason, nextAction);
+}
+
+template<class NextAspect>
+inline typename GdbRaiseAspect<NextAspect>::ConnectionType
+GdbRaiseAspect<NextAspect>::getConnectionType() const
+{
+    return connectionType;
+}
+
+template<class NextAspect>
+inline const std::string& GdbRaiseAspect<NextAspect>::getLocation() const
+{
+    return location;
+}
+
+template<class NextAspect>
+inline const std::string& GdbRaiseAspect<NextAspect>::getArgs() const
+{
+    return args;
+}
+
+template<class NextAspect>
+inline pid_t GdbRaiseAspect<NextAspect>::getPID() const
+{
+    return pid;
 }
 
 } // namespace NSGdbProxy
