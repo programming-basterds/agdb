@@ -38,33 +38,108 @@
 namespace NSGdbProxy
 {
 
+/**
+ * @brief Raise GDB Proxy aspect.
+ * @details Provides services for control flow execution of gdb instance.
+ * @tparam NextAspect Next aspect in AOP weave.
+ */
 template<class NextAspect>
 class GdbRaiseAspect : public NextAspect
 {
 
 public:
+
+    /** @brief Connection types. */
+    enum class ConnectionType
+    {
+        Local,
+        Remote
+    };
+
     using NextAspect::NextAspect;
 
+    /**
+     * @brief Connects to local gdb instance.
+     * @return True if connection was successfull. False otherwhise.
+     */
     bool connectLocal();
 
+
+    /**
+     * @brief Connects to a remote gdb instance.
+     * @param[in] location Remote instance location.
+     * @return True if connection was successfull. False otherwhise.
+     */
     bool connectRemote(const std::string& location);
 
+    /**
+     * @brief Runs instance.
+     * @details It only works on local instances.
+     */
     void run();
 
-    void disconnect();
+    /** @brief Disconnects from gdb instance. */
+    inline void disconnect();
 
-    bool loadSymbols();
+    /** @brief Loads symbols. */
+    inline bool loadSymbols();
 
+    /**
+     * @brief Sets arguments for program.
+     * @param[in] args Arguments.
+     * @return True if arguments was successfully setted. False otherwhise.
+     */
     bool setProgramArguments(const std::string& args);
 
+    /**
+     * @brief Sends SIGINT to gdb instance.
+     */
     inline void interrupt();
 
+    /**
+     * @brief ConnectionType getter.
+     * @return Connection type.
+     */
+    inline ConnectionType getConnectionType() const;
+
+    /**
+     * @brief Instance location getter.
+     * @return Location.
+     */
+    inline const std::string& getLocation() const;
+
+    /**
+     * @brief Instance arguments getter.
+     * @return Arguments.
+     */
+    inline const std::string& getArgs() const;
+
+    /**
+     * @brief Instance PID getter.
+     * @return Instance PID.
+     */
+    inline pid_t getPID() const;
+
 protected:
+
+    /** NextAspect implementation. */
     inline void processStopReason(mi_output* const response,
                                   const NSCommon::StopReason& reason,
                                   moirai::PostIterationAction& nextAction) override;
+
 private:
-    pid_t pid;
+
+    /** @brief Connection type. */
+    ConnectionType  connectionType;
+
+    /** @brief PID. */
+    pid_t           pid = -1;
+
+    /** @brief Instance Location. */
+    std::string     location;
+
+    /** @brief Instance arguments. */
+    std::string     args;
 };
 
 template<class NextAspect>
@@ -72,11 +147,10 @@ bool GdbRaiseAspect<NextAspect>::connectLocal()
 {
     std::cout << "Connecting with local gdb" << std::endl;
     this->handler = mi_connect_local();
-    auto connected = this->handler != nullptr;
+    const auto connected = this->handler != nullptr;
     if (connected)
     {
-        // TODO: Check if its needed to interrupt
-        //mili::assert_throw<NSCommon::MiAsyncModeError>(gmi_gdb_set(this->handler, "mi-async", "on"));
+        this->connectionType = ConnectionType::Local;
     }
     return connected;
 }
@@ -86,14 +160,22 @@ bool GdbRaiseAspect<NextAspect>::connectRemote(const std::string& location)
 {
     std::cout << "Connecting with remote gdb at " << location << std::endl;
     gmi_target_select(this->handler, "extended-remote", location.c_str());
-    return this->handler != nullptr;
+    const auto connected = this->handler != nullptr;
+    if (connected)
+    {
+        this->connectionType = ConnectionType::Remote;
+        this->location = location;
+    }
+    return connected;
 }
 
 template<class NextAspect>
 void GdbRaiseAspect<NextAspect>::run()
 {
     // This pointer is setted to stop execution at begining of local program
-    auto br = gmi_break_insert_full(this->handler, 1, 0, NULL, -1, -1, "_start");
+    auto br = gmi_break_insert_full(this->handler,
+                                    1, 0, NULL, -1, -1, "_start");
+
     mili::assert_throw<NSCommon::RaiseLocalBreakpointError>(br != nullptr);
 
     auto success = gmi_exec_run(this->handler);
@@ -121,7 +203,7 @@ inline void GdbRaiseAspect<NextAspect>::interrupt()
 }
 
 template<class NextAspect>
-void GdbRaiseAspect<NextAspect>::disconnect()
+inline void GdbRaiseAspect<NextAspect>::disconnect()
 {
     gmi_gdb_exit(this->handler);
     mi_disconnect(this->handler);
@@ -130,12 +212,20 @@ void GdbRaiseAspect<NextAspect>::disconnect()
 template<class NextAspect>
 bool GdbRaiseAspect<NextAspect>::setProgramArguments(const std::string& args)
 {
-    std::cout << "Program: " << this->program << "\nArguments: " << args << std::endl;
-    return gmi_set_exec(this->handler, this->program.c_str(), args.c_str()) != 0;
+    std::cout << "Program: " << this->program
+              << "\nArguments: " << args << std::endl;
+    const auto success = gmi_set_exec(this->handler,
+                                      this->program.c_str(),
+                                      args.c_str()) != 0;
+    if (success)
+    {
+        this->args = args;
+    }
+    return success;
 }
 
 template<class NextAspect>
-bool GdbRaiseAspect<NextAspect>::loadSymbols()
+inline bool GdbRaiseAspect<NextAspect>::loadSymbols()
 {
     std::cout << "Loading symbols for: " << this->program << std::endl;
     return gmi_file_symbol_file(this->handler, this->program.c_str());
@@ -151,6 +241,31 @@ inline void GdbRaiseAspect<NextAspect>::processStopReason(mi_output* const respo
     }
 
     NextAspect::processStopReason(response, stopReason, nextAction);
+}
+
+template<class NextAspect>
+inline typename GdbRaiseAspect<NextAspect>::ConnectionType
+GdbRaiseAspect<NextAspect>::getConnectionType() const
+{
+    return connectionType;
+}
+
+template<class NextAspect>
+inline const std::string& GdbRaiseAspect<NextAspect>::getLocation() const
+{
+    return location;
+}
+
+template<class NextAspect>
+inline const std::string& GdbRaiseAspect<NextAspect>::getArgs() const
+{
+    return args;
+}
+
+template<class NextAspect>
+inline pid_t GdbRaiseAspect<NextAspect>::getPID() const
+{
+    return pid;
 }
 
 } // namespace NSGdbProxy
