@@ -33,9 +33,15 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Fwd command.
+ * @details Forwards command directly to gdb instance.
+ */
 class FwdCommand : public ICommand
 {
 private:
+
+    /** @bief Arguments Index. */
     enum ArgsIndex
     {
         InstanceNumber,
@@ -43,6 +49,7 @@ private:
         NumberOfArgs
     };
 
+    /** @brief ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

@@ -6,7 +6,7 @@
  * @file        diffCommand.h
  * @author      Emanuel Bringas
  * @date        2016-05-09
- * @brief
+ * @brief       Diff commands classes declaration.
  *
  * This file is part of agdb
  *
@@ -34,12 +34,24 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Diff command abstract class.
+ * @details Provides a generic implementation for Diff command.
+ */
 class DiffCommand : public ICommand
 {
 protected:
+
+    /**
+     * @brief Steps an instance.
+     * @param[in/out] instance Instance to step.
+     * @return        Result of stepping implementation.
+     */
     virtual std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) = 0;
 
 private:
+
+    /** @brief Argument index */
     enum ArgsIndex
     {
         InstanceNumber1,
@@ -47,26 +59,59 @@ private:
         NumberOfArgs
     };
 
+    /**
+     * @brief Executes diff command with steppingMethod.
+     * @param[in] args Container of command arguments.
+     * @param[in] ctx  Command current context.
+     */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
+/**
+ * @brief Next Diff command.
+ * @details Implements diff using GDB command n.
+ */
 class NextDiffCommand : public DiffCommand
 {
+private:
+
+    /** @brief DiffCommand implementation. */
     std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
+/**
+ * @brief Next Istruction Diff command.
+ * @details Implements diff using GDB command ni.
+ */
 class NextInstructionDiffCommand : public DiffCommand
 {
+private:
+
+    /** @brief DiffCommand implementation. */
     std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
+/**
+ * @brief Step Diff command.
+ * @details Implements diff using GDB command s.
+ */
 class StepDiffCommand : public DiffCommand
 {
+private:
+
+    /** @brief DiffCommand implementation. */
     std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
+/**
+ * @brief Step Instruction Diff command.
+ * @details Implements diff using GDB command si.
+ */
 class StepInstructionDiffCommand : public DiffCommand
 {
+private:
+
+    /** @brief DiffCommand implementation. */
     std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 

@@ -6,7 +6,7 @@
  * @file        diffCommand.cpp
  * @author      Emanuel Bringas
  * @date        2016-05-04
- * @brief
+ * @brief       Diff commands classes definition.
  *
  * This file is part of agdb
  *

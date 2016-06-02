@@ -34,9 +34,15 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Raise Local command.
+ * @details Raises a local gdb instance.
+ */
 class RaiseLocalCommand : public ICommand
 {
 private:
+
+    /** @biref Arguments Index. */
     enum ArgsIndex
     {
         Program,
@@ -44,6 +50,7 @@ private:
         NumberOfArgs
     };
 
+    /** @brief ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

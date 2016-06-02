@@ -33,9 +33,14 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Multicontinue command.
+ * @details Continues all instances stopped.
+ */
 class MultiContinueCommand : public ICommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    /** @brief ICommand implementation. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

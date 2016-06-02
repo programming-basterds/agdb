@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        multiInterruptCommand.h
+ * @file        multiInterruptCommand.cpp
  * @author      Gustavo Ojeda
  * @date        2016-05-11
- * @brief
+ * @brief       MultiInterruptCommand class implementation.
  *
  * This file is part of agdb
  *
@@ -24,36 +24,41 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MULTI_INTERRUPT_COMMAND_H_
-#define _MULTI_INTERRUPT_COMMAND_H_
-
-#include <string>
-#include "common/exceptions.h"
-#include "ICommand.h"
+#include "commands/multiInterruptCommand.h"
 
 namespace NSCommands
 {
 
-/**
- * @brief Multi interrupt command.
- * @details Interrupts all running instances.
- */
-class MultiInterruptCommand : public ICommand
+void MultiInterruptCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-private:
+    if (args.empty())
+    {
+        multipleInterrupt(ctx);
+    }
+    else
+    {
+        interruptIds(args, ctx);
+    }
+}
 
-    /**
-     * @brief Iterrupts all instances.
-     * @param[in/out] ctx Current context.
-     */
-    static void multipleInterrupt(NSDebuggingContext::Context& ctx);
+void MultiInterruptCommand::multipleInterrupt(NSDebuggingContext::Context& ctx)
+{
+    for (auto& proxy : ctx)
+    {
+        proxy.second->interrupt();
+    }
+}
 
-    static void interruptIds(const Arguments& args, NSDebuggingContext::Context& ctx);
-
-    /** @brief ICommand implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
-};
+void MultiInterruptCommand::interruptIds(const Arguments& args, NSDebuggingContext::Context& ctx)
+{
+    for (const auto& arg : args)
+    {
+        auto id = 0u;
+        mili::assert_throw<NSCommon::InvalidInstanceID>(mili::from_string<NSCommon::InstanceId>(arg, id));
+        const auto instance = ctx.getInstance(id).lock();
+        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+        instance->interrupt();
+    }
+}
 
 } // namespace NSCommands
-
-#endif // _MULTI_INTERRUPT_COMMAND_H_
