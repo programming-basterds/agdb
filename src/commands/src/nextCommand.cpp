@@ -37,8 +37,10 @@ void NextCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(0u == args.size() || args.size() == unsigned(NumberOfArgs));
 
     const auto instanceNmbr = (args.size() == 0u) ? ctx.getCurrentInstance() : mili::from_string<NSCommon::InstanceId>(args[InstanceNumber]);
-    auto& instance = ctx.getInstance(instanceNmbr);
-    auto nextTermination = instance.next();
+    const auto instance = ctx.getInstance(instanceNmbr).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+
+    auto nextTermination = instance->next();
     nextTermination.wait();
 }
 

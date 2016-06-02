@@ -46,9 +46,12 @@ void MultiBreakpointCommand::execute(const Arguments& args, NSDebuggingContext::
         throw NSCommon::ArgumentMissing(WHEN_WORD);
     }
 
-    auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1]));
+    auto instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance1])).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance1));
     const auto location1 = BreakpointLocation::fromArgument(args[Location1]);
-    auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2]));
+
+    auto instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[Instance2])).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance2));
     auto location2 = BreakpointLocation::fromArgument(args[Location2]);
 
     if (args.size() == NumberOfArgs)

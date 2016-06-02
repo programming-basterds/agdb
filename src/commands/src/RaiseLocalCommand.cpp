@@ -36,7 +36,8 @@ void RaiseLocalCommand::execute(const Arguments& args, NSDebuggingContext::Conte
 {
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(0u < args.size() && args.size() <= unsigned(NumberOfArgs));
 
-    NSGdbProxy::GdbProxy* proxy = new NSGdbProxy::GdbProxy(args[Program]);
+    std::shared_ptr<NSGdbProxy::GdbProxy> proxy(new NSGdbProxy::GdbProxy(args[Program]));
+
     mili::assert_throw<NSCommon::LocalGDBConnectionFailed>(proxy->connectLocal());
 
     const auto progArgs = (args.size() == ProgramArguments) ? Argument{} :
@@ -45,7 +46,7 @@ void RaiseLocalCommand::execute(const Arguments& args, NSDebuggingContext::Conte
 
     proxy->run();
 
-    const auto nid = ctx.addGdbInstance(proxy);
+    const auto nid = ctx.addGdbInstance(std::move(proxy));
     ctx.setCurrentInstance(nid);
 
     std::cout << "Instance number " << nid << std::endl;

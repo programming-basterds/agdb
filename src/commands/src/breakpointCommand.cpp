@@ -42,7 +42,9 @@ void BreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Conte
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 1u || args.size() == NumberOfArgs);
 
     const auto instanceId = ctx.getCurrentInstance();
-    auto& instance = ctx.getInstance(instanceId);
+    auto instance = ctx.getInstance(instanceId).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+
     auto location = BreakpointLocation::fromArgument(args[Location]);
     if (args.size() == NumberOfArgs)
     {
@@ -54,14 +56,14 @@ void BreakpointCommand::execute(const Arguments& args, NSDebuggingContext::Conte
     }
     // else there is no condition on breakpoint.
 
-    auto breakpoint = instance.addBreakpoint(location, [instanceId](IUserBreakpoint* /*breakpoint*/, moirai::PostIterationAction & nextAction)
+    auto breakpoint = instance->addBreakpoint(location, [instanceId](IUserBreakpoint* /*breakpoint*/, moirai::PostIterationAction & nextAction)
     {
         std::cout << "Breakpoint in instance " << instanceId << std::endl;
         nextAction = moirai::SuspendLooping;
     });
 
     const auto breakpointId = ctx.addBreakpoint(breakpoint);
-    instance.registerTerminationCallback([&ctx, breakpointId]()
+    instance->registerTerminationCallback([&ctx, breakpointId]()
     {
         ctx.removeBreakpoint(breakpointId);
     });

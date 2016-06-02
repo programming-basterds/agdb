@@ -55,9 +55,10 @@ class BacktraceCommand : public ICommand
         mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 0);
         Message message;
         const auto cID = ctx.getCurrentInstance();
-        auto& instance = ctx.getInstance(cID);
+        const auto instance = ctx.getInstance(cID).lock();
+        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
-        instance.backtrace(message);
+        instance->backtrace(message);
 
         std::cout << message << std::endl;
     }

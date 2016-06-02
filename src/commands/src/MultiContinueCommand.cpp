@@ -42,8 +42,9 @@ void MultiContinueCommand::execute(const Arguments& args, NSDebuggingContext::Co
     {
         for (const auto& arg : args)
         {
-            auto& proxy = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(arg));
-            proxy.continueExecution();
+            const auto proxy = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(arg)).lock();
+            mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(proxy));
+            proxy->continueExecution();
         }
     }
 }

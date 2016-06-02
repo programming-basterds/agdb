@@ -42,9 +42,9 @@ class MultiBreakpoint
 public:
     MultiBreakpoint();
 
-    void addInconditionalBreakpoint(NSGdbProxy::GdbProxy& instance, const BreakpointLocation& location);
+    void addInconditionalBreakpoint(std::shared_ptr<NSGdbProxy::GdbProxy>&  instance, const BreakpointLocation& location);
 
-    void addConditionalBreakpoint(NSGdbProxy::GdbProxy& instance, const BreakpointLocation& location);
+    void addConditionalBreakpoint(std::shared_ptr<NSGdbProxy::GdbProxy>& instance, const BreakpointLocation& location);
 
     void enable();
 

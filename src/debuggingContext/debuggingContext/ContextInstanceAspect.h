@@ -42,23 +42,21 @@ using NSCommon::IncrementalContainer;
 template<class NextAspect>
 class ContextInstanceAspect : public NextAspect
 {
-
 private:
-
-    using InstancesContainer = IncrementalContainer<NSCommon::InstanceId, std::unique_ptr<NSGdbProxy::GdbProxy>>;
+    using InstancesContainer = IncrementalContainer<NSCommon::InstanceId, std::shared_ptr<NSGdbProxy::GdbProxy>>;
 
 public:
+    using GdbProxyPtr = std::weak_ptr<NSGdbProxy::GdbProxy>;
+
     using NextAspect::NextAspect;
 
     using const_iterator = typename InstancesContainer::const_iterator;
 
     static constexpr NSCommon::InstanceId NoInstance = 0u;
 
-    NSCommon::InstanceId addGdbInstance(NSGdbProxy::GdbProxy* const instance);
+    NSCommon::InstanceId addGdbInstance(std::shared_ptr<NSGdbProxy::GdbProxy>&& instance);
 
-    NSCommon::InstanceId addGdbInstance(std::unique_ptr<NSGdbProxy::GdbProxy>&& instance);
-
-    NSGdbProxy::GdbProxy& getInstance(NSCommon::InstanceId id) const;
+    GdbProxyPtr getInstance(NSCommon::InstanceId id) const;
 
     NSCommon::InstanceId getCurrentInstance() const;
 
@@ -76,7 +74,7 @@ protected:
 };
 
 template<class NextAspect>
-NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(NSGdbProxy::GdbProxy* const instance)
+NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(std::shared_ptr<NSGdbProxy::GdbProxy>&& instance)
 {
     const auto instanceId = gdbInstances.emplace(instance);
     instance->registerTerminationCallback([this, instance, instanceId]()
@@ -90,9 +88,9 @@ NSCommon::InstanceId ContextInstanceAspect<NextAspect>::addGdbInstance(NSGdbProx
 }
 
 template<class NextAspect>
-NSGdbProxy::GdbProxy& ContextInstanceAspect<NextAspect>::getInstance(NSCommon::InstanceId id) const
+typename ContextInstanceAspect<NextAspect>::GdbProxyPtr ContextInstanceAspect<NextAspect>::getInstance(NSCommon::InstanceId id) const
 {
-    return *gdbInstances.get(id);
+    return gdbInstances.get(id);
 }
 
 template<class NextAspect>
