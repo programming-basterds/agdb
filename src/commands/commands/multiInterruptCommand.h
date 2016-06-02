@@ -48,6 +48,11 @@ private:
      */
     static void multipleInterrupt(NSDebuggingContext::Context& ctx);
 
+    /**
+     * @brief Interrupt ids indicated by args.
+     * @param[in]     args Instance ids.
+     * @param[in/out] ctx  Current context.
+     */
     static void interruptIds(const Arguments& args, NSDebuggingContext::Context& ctx);
 
     /** @brief ICommand implementation. */

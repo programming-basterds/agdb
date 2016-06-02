@@ -6,7 +6,7 @@
  * @file        backtraceCommand.h
  * @author      Gustavo Ojeda
  * @date        2016-05-10
- * @brief
+ * @brief       BacktraceCommand class declaration.
  *
  * This file is part of agdb
  *
@@ -42,26 +42,19 @@ namespace NSCommands
  */
 class BacktraceCommand : public ICommand
 {
+private:
+
     using LineIndex = unsigned;
     using Message = std::string;
 
+    /** @brief Arguments index. */
     enum ArgumentsIndex
     {
         ArgumentsNumber
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override
-    {
-        mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 0);
-        Message message;
-        const auto cID = ctx.getCurrentInstance();
-        const auto instance = ctx.getInstance(cID).lock();
-        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
-
-        instance->backtrace(message);
-
-        std::cout << message << std::endl;
-    }
+    /** Implements ICommand interface. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

@@ -6,7 +6,7 @@
  * @file        FwdCommand.h
  * @author      Emanuel Bringas
  * @date        2016-05-09
- * @brief
+ * @brief       FwdCommand class declaration.
  *
  * This file is part of agdb
  *

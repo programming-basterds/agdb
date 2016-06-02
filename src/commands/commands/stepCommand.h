@@ -33,15 +33,22 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Step command.
+ * @details Executes step gdb command in current instance.
+ *
+ */
 class StepCommand : public ICommand
 {
 private:
+    /** @brief Argument indexes */
     enum ArgsIndex
     {
         InstanceNumber,
         NumberOfArgs
     };
 
+    /** ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

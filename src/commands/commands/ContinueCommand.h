@@ -6,7 +6,7 @@
  * @file        ContinueCommand.h
  * @author      Emanuel Brinags
  * @date        2016-05-11
- * @brief
+ * @brief       ContinueCommand class declaration.
  *
  * This file is part of agdb
  *

@@ -7,7 +7,7 @@
  * @author      Emanuel Bringas
  * @author      Leonardo Boquillón
  * @date        2016-05-04
- * @brief
+ * @brief       RaiseLocalCommand declaration.
  *
  * This file is part of agdb
  *

@@ -29,6 +29,15 @@
 namespace NSCommands
 {
 
+void NoArgsCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
+{
+    if (not args.empty())
+    {
+        throw "This command shall not receive arguments.";
+    }
+    execute(ctx);
+}
+
 void QuitCommand::execute(NSDebuggingContext::Context& ctx)
 {
     ctx.running = false; /* etc */

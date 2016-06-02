@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        RaiseRemoteCommand.h
- * @author      Emanuel Bringas
- * @date        2016-05-06
- * @brief       RaiseRemoteCommand declaration.
+ * @file        backtraceCommand.cpp
+ * @author      Gustavo Ojeda
+ * @date        2016-06-02
+ * @brief       BacktraceCommand class definition.
  *
  * This file is part of agdb
  *
@@ -24,36 +24,22 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _RAISE_REMOTE_COMMAND_INCLUDE_H_
-#define _RAISE_REMOTE_COMMAND_INCLUDE_H_
-
-#include "debuggingContext/Context.h"
-#include "commands/ICommand.h"
+#include "commands/backtraceCommand.h"
 
 namespace NSCommands
 {
 
-/**
- * @brief Raise Remote command.
- * @details Raises a connection to a remote gdb instance.
- */
-class RaiseRemoteCommand : public ICommand
+void BacktraceCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-private:
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 0);
+    Message message;
+    const auto cID = ctx.getCurrentInstance();
+    const auto instance = ctx.getInstance(cID).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
-    /** @brief Arguments index. */
-    enum ArgsIndex
-    {
-        Location,
-        Program,
-        ProgramArguments,
-        NumberOfArgs
-    };
+    instance->backtrace(message);
 
-    /** @brief ICommand implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
-};
+    std::cout << message << std::endl;
+}
 
 } // namespace NSCommands
-
-#endif /* _RAISE_COMMAND_INCLUDE_H_ */

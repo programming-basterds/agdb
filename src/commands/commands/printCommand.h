@@ -33,16 +33,22 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Print command.
+ * @details Evaluates an expression in current instance.
+ */
 class PrintCommand : public ICommand
 {
     using Message = std::string;
 
+    /** @brief Arguments index. */
     enum ArgumentsIndex
     {
         Expression,
         ArgumentsNumber
     };
 
+    /** ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

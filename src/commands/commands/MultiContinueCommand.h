@@ -6,7 +6,7 @@
  * @file        MultiContinueCommand.h
  * @author      Leonardo Boquillon
  * @date        2016-05-10
- * @brief
+ * @brief       MultiContinue class declaration.
  *
  * This file is part of agdb
  *
