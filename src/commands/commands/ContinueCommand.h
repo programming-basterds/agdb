@@ -6,7 +6,7 @@
  * @file        ContinueCommand.h
  * @author      Emanuel Brinags
  * @date        2016-05-11
- * @brief
+ * @brief       ContinueCommand class declaration.
  *
  * This file is part of agdb
  *
@@ -33,9 +33,16 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Continue command.
+ * @details Continues current instance execution if stopped.
+ */
 class ContinueCommand : public ICommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+private:
+
+    /** @brief ICommand implementation. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

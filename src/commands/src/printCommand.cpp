@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        listCommand.h
+ * @file        printCommand.cpp
  * @author      Gustavo Ojeda
- * @date        2016-05-10
- * @brief       ListCommand class declaration.
+ * @date        2016-05-04
+ * @brief       PrintCommand class definition
  *
  * This file is part of agdb
  *
@@ -24,39 +24,23 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _COMMAND_LIST_H_
-#define _COMMAND_LIST_H_
-
-#include <string>
-#include "commands/ICommand.h"
+#include "common/exceptions.h"
+#include "commands/printCommand.h"
 
 namespace NSCommands
 {
 
-/**
- * @brief This command shows the source code accordingly to the user input.
- *
- * @details Usage:
- *              list: [filename line numberOfLine]
- */
-class ListCommand : public ICommand
+void PrintCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    using LineIndex = unsigned;
-    using Message = std::string;
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == ArgumentsNumber);
 
-    /** @brief Arguments index. */
-    enum ArgumentsIndex
-    {
-        Filename,
-        LineNumber,
-        LineCounter,
-        ArgumentsNumber
-    };
+    Message msg;
+    const auto cID = ctx.getCurrentInstance();
+    const auto instance = ctx.getInstance(cID).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
-    /** @brief ICommand implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
-};
+    instance->evaluateExpression(args[Expression], msg);
+    std::cout << args[Expression] << " = " << msg << std::endl;
+}
 
 } // namespace NSCommands
-
-#endif // _COMMAND_LIST_H_

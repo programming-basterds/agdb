@@ -6,7 +6,7 @@
  * @file        ICommand.h
  * @author      Leonardo Boquillón
  * @date        2016-05-04
- * @brief
+ * @brief       ICommant interface declaration.
  *
  * This file is part of agdb
  *
@@ -38,9 +38,21 @@ namespace NSCommands
 using Argument = std::string;
 using Arguments = std::vector<Argument>;
 
+/**
+ * @brief Command interface.
+ * @details Execution interface for commands.
+ */
 struct ICommand
 {
+    /**
+     * @brief Executes command.
+     * @param[in] args Container of command arguments.
+     * @param[in] ctx  Command current context.
+     */
     virtual void execute(const Arguments& args, NSDebuggingContext::Context& ctx) = 0;
+
+    /** @brief Destructor */
+    virtual ~ICommand() = default;
 };
 
 } // namespace NSCommands

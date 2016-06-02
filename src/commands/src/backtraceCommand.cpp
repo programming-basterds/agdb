@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        listCommand.h
+ * @file        backtraceCommand.cpp
  * @author      Gustavo Ojeda
- * @date        2016-05-10
- * @brief       ListCommand class declaration.
+ * @date        2016-06-02
+ * @brief       BacktraceCommand class definition.
  *
  * This file is part of agdb
  *
@@ -24,39 +24,22 @@
  * along with agdb.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _COMMAND_LIST_H_
-#define _COMMAND_LIST_H_
-
-#include <string>
-#include "commands/ICommand.h"
+#include "commands/backtraceCommand.h"
 
 namespace NSCommands
 {
 
-/**
- * @brief This command shows the source code accordingly to the user input.
- *
- * @details Usage:
- *              list: [filename line numberOfLine]
- */
-class ListCommand : public ICommand
+void BacktraceCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    using LineIndex = unsigned;
-    using Message = std::string;
+    mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 0);
+    Message message;
+    const auto cID = ctx.getCurrentInstance();
+    const auto instance = ctx.getInstance(cID).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
-    /** @brief Arguments index. */
-    enum ArgumentsIndex
-    {
-        Filename,
-        LineNumber,
-        LineCounter,
-        ArgumentsNumber
-    };
+    instance->backtrace(message);
 
-    /** @brief ICommand implementation. */
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
-};
+    std::cout << message << std::endl;
+}
 
 } // namespace NSCommands
-
-#endif // _COMMAND_LIST_H_

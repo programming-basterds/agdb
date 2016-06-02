@@ -33,15 +33,21 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Next command.
+ * @details Implements gdb next command.
+ */
 class NextCommand : public ICommand
 {
 private:
+    /** Arguments index */
     enum ArgsIndex
     {
         InstanceNumber,
         NumberOfArgs
     };
 
+    /** ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

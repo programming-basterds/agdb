@@ -6,7 +6,7 @@
  * @file        FwdCommand.h
  * @author      Emanuel Bringas
  * @date        2016-05-09
- * @brief
+ * @brief       FwdCommand class declaration.
  *
  * This file is part of agdb
  *
@@ -33,9 +33,15 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Fwd command.
+ * @details Forwards command directly to gdb instance.
+ */
 class FwdCommand : public ICommand
 {
 private:
+
+    /** @bief Arguments Index. */
     enum ArgsIndex
     {
         InstanceNumber,
@@ -43,6 +49,7 @@ private:
         NumberOfArgs
     };
 
+    /** @brief ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

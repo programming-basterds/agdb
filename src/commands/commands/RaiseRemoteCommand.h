@@ -6,7 +6,7 @@
  * @file        RaiseRemoteCommand.h
  * @author      Emanuel Bringas
  * @date        2016-05-06
- * @brief
+ * @brief       RaiseRemoteCommand declaration.
  *
  * This file is part of agdb
  *
@@ -33,9 +33,15 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Raise Remote command.
+ * @details Raises a connection to a remote gdb instance.
+ */
 class RaiseRemoteCommand : public ICommand
 {
 private:
+
+    /** @brief Arguments index. */
     enum ArgsIndex
     {
         Location,
@@ -44,6 +50,7 @@ private:
         NumberOfArgs
     };
 
+    /** @brief ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

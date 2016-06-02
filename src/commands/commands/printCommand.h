@@ -3,10 +3,10 @@
  *                  Francisco Herrero, Emanuel Bringas, Gustavo Ojeda,
  *                  Taller Technologies.
  *
- * @file        CommandPrint.h
+ * @file        printCommand.h
  * @author      Gustavo Ojeda
  * @date        2016-05-04
- * @brief
+ * @brief       PrintCommand class declaration.
  *
  * This file is part of agdb
  *
@@ -28,34 +28,28 @@
 #define _COMMAND_PRINT_H_
 
 #include <string>
-#include "common/exceptions.h"
 #include "commands/ICommand.h"
 
 namespace NSCommands
 {
 
+/**
+ * @brief Print command.
+ * @details Evaluates an expression in current instance.
+ */
 class PrintCommand : public ICommand
 {
     using Message = std::string;
 
+    /** @brief Arguments index. */
     enum ArgumentsIndex
     {
         Expression,
         ArgumentsNumber
     };
 
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override
-    {
-        mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == ArgumentsNumber);
-
-        Message msg;
-        const auto cID = ctx.getCurrentInstance();
-        const auto instance = ctx.getInstance(cID).lock();
-        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
-
-        instance->evaluateExpression(args[Expression], msg);
-        std::cout << args[Expression] << " = " << msg << std::endl;
-    }
+    /** ICommand implementation. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

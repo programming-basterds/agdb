@@ -6,7 +6,7 @@
  * @file        baseCommands.h
  * @author      Daniel Gutson, Emanuel Bringas, Leonardo Boquillon
  * @date        2016-05-04
- * @brief
+ * @brief       Basic commands declaration.
  *
  * This file is part of agdb
  *
@@ -32,27 +32,39 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Abstract NoArgs command.
+ * @details Provides an implementaton support for command without arguments.
+ */
 class NoArgsCommand : public ICommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override final
-    {
-        if (not args.empty())
-        {
-            throw "This command shall not receive arguments.";
-        }
-        execute(ctx);
-    }
+    /** @brief ICommand interface implementation. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override final;
 
+    /**
+     * @brief Executes a command without arguments.
+     * @param[in/out] ctx Current context.
+     */
     virtual void execute(NSDebuggingContext::Context& ctx) = 0;
 };
 
+/**
+ * @brief Quit command.
+ * @details Quits from application.
+ */
 class QuitCommand : public NoArgsCommand
 {
+private:
+
+    /** @brief ICommand interface implementation. */
     void execute(NSDebuggingContext::Context& ctx) override;
 };
 
 class ShowVersion : public NoArgsCommand
 {
+private:
+
+    /** @brief ICommand interface implementation. */
     void execute(NSDebuggingContext::Context& ctx) override;
 };
 

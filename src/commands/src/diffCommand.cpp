@@ -6,7 +6,7 @@
  * @file        diffCommand.cpp
  * @author      Emanuel Bringas
  * @date        2016-05-04
- * @brief
+ * @brief       Diff commands classes definition.
  *
  * This file is part of agdb
  *
@@ -37,7 +37,7 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance1));
     auto instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber2])).lock();
     mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance2));
-    mili::assert_throw<NSCommon::InstancesAreNotStopped>(not (instance1->isRunning() or instance2->isRunning()));
+    mili::assert_throw<NSCommon::InstancesAreNotStopped>(not(instance1->isRunning() or instance2->isRunning()));
 
     auto framesAreEquals = false;
     do

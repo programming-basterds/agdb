@@ -6,7 +6,7 @@
  * @file        MultiContinueCommand.h
  * @author      Leonardo Boquillon
  * @date        2016-05-10
- * @brief
+ * @brief       MultiContinue class declaration.
  *
  * This file is part of agdb
  *
@@ -33,9 +33,14 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Multicontinue command.
+ * @details Continues all instances stopped.
+ */
 class MultiContinueCommand : public ICommand
 {
-    void execute(const Arguments& args, NSDebuggingContext::Context& ctx);
+    /** @brief ICommand implementation. */
+    void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 
 } // namespace NSCommands

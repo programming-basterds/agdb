@@ -32,8 +32,15 @@
 namespace NSCommands
 {
 
+/**
+ * @brief Instance command.
+ * @details Instance manipulation command.
+ */
 class InstanceCommand : public ICommand
 {
+private:
+
+    /** @brief ICommand implementation. */
     void execute(const Arguments& args, NSDebuggingContext::Context& ctx) override;
 };
 

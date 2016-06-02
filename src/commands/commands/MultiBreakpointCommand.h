@@ -8,7 +8,7 @@
  * @author      Leonardo Boquillón
  * @author      Francisco Herrero
  * @date        2016-05-04
- * @brief
+ * @brief       MultiBreakpoint declaration.
  *
  * This file is part of agdb
  *
