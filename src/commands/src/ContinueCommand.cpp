@@ -34,8 +34,10 @@ namespace NSCommands
 void ContinueCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.empty());
-    auto& proxy = ctx.getInstance(ctx.getCurrentInstance());
-    proxy.continueExecution();
+    const auto instance = ctx.getInstance(ctx.getCurrentInstance()).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+
+    instance->continueExecution();
 }
 
 } // namespace NSCommands

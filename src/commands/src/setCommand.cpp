@@ -34,7 +34,8 @@ void SetCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 1u || args.size() == 2u);
 
     auto instanceId = ctx.getCurrentInstance();
-    auto& instance = ctx.getInstance(instanceId);
+    const auto instance = ctx.getInstance(instanceId).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
     if (args.size() == 1u)
     {
@@ -44,11 +45,11 @@ void SetCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx
         {
             throw NSCommon::InvalidArgument(assignation);
         }
-        instance.setVariable(assignation.substr(0u, pos), assignation.substr(pos + 1u));
+        instance->setVariable(assignation.substr(0u, pos), assignation.substr(pos + 1u));
     }
     else // args.size() == 2u
     {
-        instance.setEnvironment(args[0u], args[1u]);
+        instance->setEnvironment(args[0u], args[1u]);
     }
 }
 

@@ -50,9 +50,10 @@ class PrintCommand : public ICommand
 
         Message msg;
         const auto cID = ctx.getCurrentInstance();
-        auto& instance = ctx.getInstance(cID);
-        instance.evaluateExpression(args[Expression], msg);
+        const auto instance = ctx.getInstance(cID).lock();
+        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
+        instance->evaluateExpression(args[Expression], msg);
         std::cout << args[Expression] << " = " << msg << std::endl;
     }
 };

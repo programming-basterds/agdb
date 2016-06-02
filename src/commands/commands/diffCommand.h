@@ -37,7 +37,7 @@ namespace NSCommands
 class DiffCommand : public ICommand
 {
 protected:
-    virtual std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) = 0;
+    virtual std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) = 0;
 
 private:
     enum ArgsIndex
@@ -52,22 +52,22 @@ private:
 
 class NextDiffCommand : public DiffCommand
 {
-    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+    std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
 class NextInstructionDiffCommand : public DiffCommand
 {
-    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+    std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
 class StepDiffCommand : public DiffCommand
 {
-    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+    std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
 class StepInstructionDiffCommand : public DiffCommand
 {
-    std::future<bool> steppingMethod(NSGdbProxy::GdbProxy& instance) override;
+    std::future<bool> steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance) override;
 };
 
 } // namespace NSCommands

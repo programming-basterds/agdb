@@ -37,8 +37,10 @@ void StepCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(0u == args.size() || args.size() == unsigned(NumberOfArgs));
 
     const auto instanceNmbr = (args.size() == 0u) ? ctx.getCurrentInstance() : mili::from_string<NSCommon::InstanceId>(args[InstanceNumber]);
-    auto& instance = ctx.getInstance(instanceNmbr);
-    auto stepTermination = instance.next();
+    const auto instance = ctx.getInstance(instanceNmbr).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+
+    auto stepTermination = instance->step();
     stepTermination.wait();
 }
 

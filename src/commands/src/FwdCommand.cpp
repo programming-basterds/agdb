@@ -32,7 +32,8 @@ namespace NSCommands
 
 void FwdCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    auto& instance = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber]));
+    const auto instance = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber])).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
 
     std::string msg;
     for (unsigned int i = GDBMessage; i < args.size(); ++i)
@@ -40,7 +41,7 @@ void FwdCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx
         msg += " " + args[i];
     }
 
-    instance.sendMessageToGDB(msg);
+    instance->sendMessageToGDB(msg);
 }
 
 } // namespace NSCommands

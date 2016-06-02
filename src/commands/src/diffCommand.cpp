@@ -33,9 +33,11 @@ namespace NSCommands
 void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
     mili::assert_throw<NSCommon::InvalidArgumentNumbers>(args.size() == 2);
-    auto& instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber1]));
-    auto& instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber2]));
-    mili::assert_throw<NSCommon::InstancesAreNotStopped>(not instance1.isRunning() and not instance2.isRunning());
+    auto instance1 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber1])).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance1));
+    auto instance2 = ctx.getInstance(mili::from_string<NSCommon::InstanceId>(args[InstanceNumber2])).lock();
+    mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance2));
+    mili::assert_throw<NSCommon::InstancesAreNotStopped>(not (instance1->isRunning() or instance2->isRunning()));
 
     auto framesAreEquals = false;
     do
@@ -44,19 +46,19 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
         const auto future2 = steppingMethod(instance2);
         future1.wait();
         future2.wait();
-        if (instance1.isAlive() and instance2.isAlive())
+        if (instance1->isAlive() and instance2->isAlive())
         {
-            framesAreEquals = (instance1.frame() == instance2.frame());
+            framesAreEquals = (instance1->frame() == instance2->frame());
         }
     }
-    while (instance1.isAlive() and instance2.isAlive() and framesAreEquals);
+    while (instance1->isAlive() and instance2->isAlive() and framesAreEquals);
 
 
     if (not framesAreEquals)
     {
         std::cout << "A difference of exceution was found:" << std::endl;
-        std::cout << "Instance " << InstanceNumber1 << " " << instance1.frame() << std::endl;
-        std::cout << "Instance " << InstanceNumber2 << " " << instance2.frame() << std::endl;
+        std::cout << "Instance " << InstanceNumber1 << " " << instance1->frame() << std::endl;
+        std::cout << "Instance " << InstanceNumber2 << " " << instance2->frame() << std::endl;
     }
     else // (not instancesAlive)
     {
@@ -64,24 +66,24 @@ void DiffCommand::execute(const Arguments& args, NSDebuggingContext::Context& ct
     }
 }
 
-std::future<bool> NextDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+std::future<bool> NextDiffCommand::steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance)
 {
-    return instance.next();
+    return instance->next();
 }
 
-std::future<bool> NextInstructionDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+std::future<bool> NextInstructionDiffCommand::steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance)
 {
-    return instance.nextInstruction();
+    return instance->nextInstruction();
 }
 
-std::future<bool> StepDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+std::future<bool> StepDiffCommand::steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance)
 {
-    return instance.step();
+    return instance->step();
 }
 
-std::future<bool> StepInstructionDiffCommand::steppingMethod(NSGdbProxy::GdbProxy& instance)
+std::future<bool> StepInstructionDiffCommand::steppingMethod(std::shared_ptr<NSGdbProxy::GdbProxy>& instance)
 {
-    return instance.stepInstruction();
+    return instance->stepInstruction();
 }
 
 } // namespace NSCommands

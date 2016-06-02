@@ -57,7 +57,8 @@ class ListCommand : public ICommand
     {
         Message message;
         const auto cID = ctx.getCurrentInstance();
-        auto& instance = ctx.getInstance(cID);
+        const auto instance = ctx.getInstance(cID).lock();
+        mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
         if (args.size() == ArgumentsNumber)
         {
             auto lineNumber = 0u;
@@ -67,11 +68,11 @@ class ListCommand : public ICommand
 
             mili::assert_throw<NSCommon::InvalidArgumentNumbers>(validArguments);
 
-            instance.list(args[Filename], lineNumber, lineCounter, message);
+            instance->list(args[Filename], lineNumber, lineCounter, message);
         }
         else if (args.size() == 0u)
         {
-            instance.list(message);
+            instance->list(message);
         }
         else
         {

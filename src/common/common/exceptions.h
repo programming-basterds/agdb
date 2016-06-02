@@ -124,6 +124,8 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(InstancesAreNotStopped, AgdbExceptionHandling,
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NoFrameInfo, AgdbExceptionHandling,
                                "No frame info available");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InstanceNoLongerAlive, AgdbExceptionHandling,
+                               "The instance is not longer alive");
 } // End of namespace NSCommon
 
 #endif // EXCEPTIONS_H

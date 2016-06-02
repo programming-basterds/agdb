@@ -46,9 +46,9 @@ MultiBreakpoint::MultiBreakpoint() :
 // breakpoint (agregar remove breakpoint al aspecto de breakpointing), la continúa, elimina
 // el mbr, y avisa al usuario que un mbr fue removido porque una instancia de sus dos puntas terminó.
 
-void MultiBreakpoint::addInconditionalBreakpoint(NSGdbProxy::GdbProxy& instance, const BreakpointLocation& location)
+void MultiBreakpoint::addInconditionalBreakpoint(std::shared_ptr<NSGdbProxy::GdbProxy>& instance, const BreakpointLocation& location)
 {
-    _inconditionalBreakpoint = instance.addBreakpoint(location, [this](IUserBreakpoint * breakpoint, moirai::PostIterationAction & nextAction)
+    _inconditionalBreakpoint = instance->addBreakpoint(location, [this](IUserBreakpoint * breakpoint, moirai::PostIterationAction & nextAction)
     {
         if (getSynchronizationFlag())
         {
@@ -56,19 +56,19 @@ void MultiBreakpoint::addInconditionalBreakpoint(NSGdbProxy::GdbProxy& instance,
             nextAction = moirai::SuspendLooping;
         }
     });
-    instance.registerTerminationCallback([this]()
+    instance->registerTerminationCallback([this]()
     {
         _conditionalBreakpoint->disable();
     });
 }
 
-void MultiBreakpoint::addConditionalBreakpoint(NSGdbProxy::GdbProxy& instance, const BreakpointLocation& location)
+void MultiBreakpoint::addConditionalBreakpoint(std::shared_ptr<NSGdbProxy::GdbProxy>& instance, const BreakpointLocation& location)
 {
-    _conditionalBreakpoint = instance.addBreakpoint(location, [this](IUserBreakpoint* /*breakpoint*/, moirai::PostIterationAction& /*nextAction*/)
+    _conditionalBreakpoint = instance->addBreakpoint(location, [this](IUserBreakpoint* /*breakpoint*/, moirai::PostIterationAction& /*nextAction*/)
     {
         changeSynchronizationFlagStatus(true);
     });
-    instance.registerTerminationCallback([this]()
+    instance->registerTerminationCallback([this]()
     {
         _inconditionalBreakpoint->disable();
     });

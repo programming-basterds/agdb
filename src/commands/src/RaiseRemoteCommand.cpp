@@ -35,12 +35,13 @@ namespace NSCommands
 
 void RaiseRemoteCommand::execute(const Arguments& args, NSDebuggingContext::Context& ctx)
 {
-    NSGdbProxy::GdbProxy* proxy(new NSGdbProxy::GdbProxy(args[Program]));
+    std::shared_ptr<NSGdbProxy::GdbProxy> proxy(new NSGdbProxy::GdbProxy(args[Program]));
+
     mili::assert_throw<NSCommon::LocalGDBConnectionFailed>(proxy->connectLocal());
     mili::assert_throw<NSCommon::RemoteGDBConnectionFailed>(proxy->connectRemote(args[Location]));
     mili::assert_throw<NSCommon::ParameterSettingFailed>(proxy->loadSymbols());
 
-    const auto nid = ctx.addGdbInstance(proxy);
+    const auto nid = ctx.addGdbInstance(std::move(proxy));
     ctx.setCurrentInstance(nid);
     std::cout << "Instance number " << nid << std::endl;
 }

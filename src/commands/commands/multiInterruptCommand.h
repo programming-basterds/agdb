@@ -62,8 +62,9 @@ class MultiInterruptCommand : public ICommand
         {
             auto id = 0u;
             mili::assert_throw<NSCommon::InvalidInstanceID>(mili::from_string<NSCommon::InstanceId>(arg, id));
-            auto& proxy = ctx.getInstance(id);
-            proxy.interrupt();
+            const auto instance = ctx.getInstance(id).lock();
+            mili::assert_throw<NSCommon::InstanceNoLongerAlive>(bool(instance));
+            instance->interrupt();
         }
     }
 };
